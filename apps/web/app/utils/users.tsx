@@ -7,7 +7,7 @@ export type User = {
   email: string;
 };
 
-export const DEPLOY_URL = import.meta.env.DEPLOY_URL || "http://localhost:3000";
+export const DEPLOY_URL = process.env.DEPLOY_URL || "http://localhost:3000";
 
 export const usersQueryOptions = () =>
   queryOptions({
