@@ -18,7 +18,7 @@ console.info('[test] envs.NODE_ENV', env.NODE_ENV);
 console.info('[test] envs.MODE', env.MODE);
 
 const TanStackRouterDevtools =
-  env.NODE_ENV === 'production'
+  env.MODE === 'production'
     ? () => null // Render nothing in production
     : React.lazy(() =>
         // Lazy load in development
