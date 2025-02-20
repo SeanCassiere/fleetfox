@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import axios from 'redaxios';
+import { env } from './env';
 
 export type User = {
   id: number;
@@ -7,15 +8,12 @@ export type User = {
   email: string;
 };
 
-export const DEPLOY_URL =
-  import.meta.env.PUBLIC_DEPLOY_URL || 'http://localhost:3000';
-
 export const usersQueryOptions = () =>
   queryOptions({
     queryKey: ['users'],
     queryFn: () =>
       axios
-        .get<Array<User>>(DEPLOY_URL + '/api/users')
+        .get<Array<User>>(env.PUBLIC_DEPLOY_URL + '/api/users')
         .then((r) => r.data)
         .catch(() => {
           throw new Error('Failed to fetch users');
@@ -27,7 +25,7 @@ export const userQueryOptions = (id: string) =>
     queryKey: ['users', id],
     queryFn: () =>
       axios
-        .get<User>(DEPLOY_URL + '/api/users/' + id)
+        .get<User>(env.PUBLIC_DEPLOY_URL + '/api/users/' + id)
         .then((r) => r.data)
         .catch(() => {
           throw new Error('Failed to fetch user');
