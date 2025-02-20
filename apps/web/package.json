@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
-    "build": "vinxi build",
+    "build": "vinxi build --preset=netlify",
     "start": "vinxi start",
     "test": "echo \"Error: no test specified\"",
     "lint": "echo \"Error: no lint specified\"",

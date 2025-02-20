@@ -1,9 +1,8 @@
 .DS_Store
 .cache
 .env
-.vercel
-.output
 .vinxi
+.netlify
 
 /build/
 .vinxi
