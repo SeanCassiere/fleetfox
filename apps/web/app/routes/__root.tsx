@@ -14,7 +14,8 @@ import appCss from '~/styles/app.css?url';
 import { seo } from '~/utils/seo';
 import { env } from '~/utils/env';
 
-console.info('[test] envs', env);
+console.info('[test] envs.NODE_ENV', env.NODE_ENV);
+console.info('[test] envs.MODE', env.MODE);
 
 const TanStackRouterDevtools =
   env.NODE_ENV === 'production'

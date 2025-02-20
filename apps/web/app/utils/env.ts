@@ -7,6 +7,7 @@ const serverEnvSchema = z.object({
 
 // Define client schema
 const viteEnvSchema = z.object({
+  MODE: z.string().optional().default('development'),
   PUBLIC_DEPLOY_URL: z.string().optional().default('http://localhost:3000'),
   SSR: z.boolean().optional().default(false),
 });
