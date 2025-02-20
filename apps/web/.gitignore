@@ -1,0 +1,9 @@
+.DS_Store
+.cache
+.env
+.vercel
+.output
+.vinxi
+
+/build/
+.vinxi

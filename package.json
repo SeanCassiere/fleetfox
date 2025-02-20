@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "fleet-fox",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.2.1",
+  "description": "Monorepo for Fleet Fox",
+  "author": "SeanCassiere",
+  "license": "MIT",
+  "keywords": [],
+  "scripts": {
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types",
+    "build": "turbo build",
+    "dev": "turbo dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "prettier": "^3.5.1",
+    "rimraf": "^6.0.1",
+    "turbo": "^2.4.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "typescript": "$typescript"
+    }
+  }
+}
