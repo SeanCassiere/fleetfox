@@ -8,7 +8,7 @@ export type User = {
 };
 
 export const DEPLOY_URL =
-  process.env.PUBLIC_DEPLOY_URL || 'http://localhost:3000';
+  import.meta.env.PUBLIC_DEPLOY_URL || 'http://localhost:3000';
 
 export const usersQueryOptions = () =>
   queryOptions({
