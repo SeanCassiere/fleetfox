@@ -11,11 +11,15 @@ const viteEnvSchema = z.object({
   SSR: z.boolean().optional().default(false),
 });
 
+function getEnvValue(key: string): string {
+  return import.meta.env[key] || process.env[key];
+}
+
 export const DEPLOY_URL =
-  process.env.CONTEXT === 'production'
-    ? process.env.URL
-    : process.env.CONTEXT === 'deploy-preview'
-      ? process.env.DEPLOY_PRIME_URL
+  getEnvValue('CONTEXT') === 'production'
+    ? getEnvValue('URL')
+    : getEnvValue('CONTEXT') === 'deploy-preview'
+      ? getEnvValue('DEPLOY_PRIME_URL')
       : 'https://localhost:3000';
 
 // Validate and parse environment variables
