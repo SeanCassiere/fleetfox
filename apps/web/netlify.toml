@@ -1,5 +1,5 @@
 [context.production]
-  command = "pnpm run build:production"
+  command = "pnpm run production:build"
 
 [context.deploy-preview]
-  command = "pnpm run build:deploy-preview"
+  command = "pnpm run deploy-preview:build"
