@@ -1,5 +1,0 @@
-[context.production]
-  command = "pnpm run web:build:production"
-
-[context.deploy-preview]
-  command = "pnpm run web:build:deploy-preview"
