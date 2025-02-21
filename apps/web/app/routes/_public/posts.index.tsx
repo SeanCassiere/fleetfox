@@ -7,7 +7,7 @@ const getTestSecretKey = createServerFn().handler(() => {
   return { secretKey };
 });
 
-export const Route = createFileRoute('/posts/')({
+export const Route = createFileRoute('/_public/posts/')({
   loader: () => getTestSecretKey(),
   component: PostsIndexComponent,
 });

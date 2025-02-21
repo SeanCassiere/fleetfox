@@ -11,154 +11,235 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as PostsImport } from './routes/posts'
-import { Route as IndexImport } from './routes/index'
-import { Route as PostsIndexImport } from './routes/posts.index'
-import { Route as PostsPostIdImport } from './routes/posts.$postId'
-import { Route as PostsPostIdDeepImport } from './routes/posts_.$postId.deep'
+import { Route as PublicImport } from './routes/_public'
+import { Route as AppRouteImport } from './routes/app/route'
+import { Route as AppIndexImport } from './routes/app/index'
+import { Route as PublicIndexImport } from './routes/_public/index'
+import { Route as PublicPostsImport } from './routes/_public/posts'
+import { Route as PublicPostsIndexImport } from './routes/_public/posts.index'
+import { Route as PublicPostsPostIdImport } from './routes/_public/posts.$postId'
+import { Route as PublicPostsPostIdDeepImport } from './routes/_public/posts_.$postId.deep'
 
 // Create/Update Routes
 
-const PostsRoute = PostsImport.update({
+const PublicRoute = PublicImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppRouteRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppIndexRoute = AppIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const PublicIndexRoute = PublicIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicPostsRoute = PublicPostsImport.update({
   id: '/posts',
   path: '/posts',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const PublicPostsIndexRoute = PublicPostsIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => PublicPostsRoute,
 } as any)
 
-const PostsIndexRoute = PostsIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PostsRoute,
-} as any)
-
-const PostsPostIdRoute = PostsPostIdImport.update({
+const PublicPostsPostIdRoute = PublicPostsPostIdImport.update({
   id: '/$postId',
   path: '/$postId',
-  getParentRoute: () => PostsRoute,
+  getParentRoute: () => PublicPostsRoute,
 } as any)
 
-const PostsPostIdDeepRoute = PostsPostIdDeepImport.update({
+const PublicPostsPostIdDeepRoute = PublicPostsPostIdDeepImport.update({
   id: '/posts_/$postId/deep',
   path: '/posts/$postId/deep',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRoute
     }
-    '/posts': {
-      id: '/posts'
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicImport
+      parentRoute: typeof rootRoute
+    }
+    '/_public/posts': {
+      id: '/_public/posts'
       path: '/posts'
       fullPath: '/posts'
-      preLoaderRoute: typeof PostsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PublicPostsImport
+      parentRoute: typeof PublicImport
     }
-    '/posts/$postId': {
-      id: '/posts/$postId'
+    '/_public/': {
+      id: '/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicIndexImport
+      parentRoute: typeof PublicImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_public/posts/$postId': {
+      id: '/_public/posts/$postId'
       path: '/$postId'
       fullPath: '/posts/$postId'
-      preLoaderRoute: typeof PostsPostIdImport
-      parentRoute: typeof PostsImport
+      preLoaderRoute: typeof PublicPostsPostIdImport
+      parentRoute: typeof PublicPostsImport
     }
-    '/posts/': {
-      id: '/posts/'
+    '/_public/posts/': {
+      id: '/_public/posts/'
       path: '/'
       fullPath: '/posts/'
-      preLoaderRoute: typeof PostsIndexImport
-      parentRoute: typeof PostsImport
+      preLoaderRoute: typeof PublicPostsIndexImport
+      parentRoute: typeof PublicPostsImport
     }
-    '/posts_/$postId/deep': {
-      id: '/posts_/$postId/deep'
+    '/_public/posts_/$postId/deep': {
+      id: '/_public/posts_/$postId/deep'
       path: '/posts/$postId/deep'
       fullPath: '/posts/$postId/deep'
-      preLoaderRoute: typeof PostsPostIdDeepImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PublicPostsPostIdDeepImport
+      parentRoute: typeof PublicImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface PostsRouteChildren {
-  PostsPostIdRoute: typeof PostsPostIdRoute
-  PostsIndexRoute: typeof PostsIndexRoute
+interface AppRouteRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
 }
 
-const PostsRouteChildren: PostsRouteChildren = {
-  PostsPostIdRoute: PostsPostIdRoute,
-  PostsIndexRoute: PostsIndexRoute,
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
 }
 
-const PostsRouteWithChildren = PostsRoute._addFileChildren(PostsRouteChildren)
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+interface PublicPostsRouteChildren {
+  PublicPostsPostIdRoute: typeof PublicPostsPostIdRoute
+  PublicPostsIndexRoute: typeof PublicPostsIndexRoute
+}
+
+const PublicPostsRouteChildren: PublicPostsRouteChildren = {
+  PublicPostsPostIdRoute: PublicPostsPostIdRoute,
+  PublicPostsIndexRoute: PublicPostsIndexRoute,
+}
+
+const PublicPostsRouteWithChildren = PublicPostsRoute._addFileChildren(
+  PublicPostsRouteChildren,
+)
+
+interface PublicRouteChildren {
+  PublicPostsRoute: typeof PublicPostsRouteWithChildren
+  PublicIndexRoute: typeof PublicIndexRoute
+  PublicPostsPostIdDeepRoute: typeof PublicPostsPostIdDeepRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicPostsRoute: PublicPostsRouteWithChildren,
+  PublicIndexRoute: PublicIndexRoute,
+  PublicPostsPostIdDeepRoute: PublicPostsPostIdDeepRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/posts': typeof PostsRouteWithChildren
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts/': typeof PostsIndexRoute
-  '/posts/$postId/deep': typeof PostsPostIdDeepRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '': typeof PublicRouteWithChildren
+  '/posts': typeof PublicPostsRouteWithChildren
+  '/': typeof PublicIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/posts/$postId': typeof PublicPostsPostIdRoute
+  '/posts/': typeof PublicPostsIndexRoute
+  '/posts/$postId/deep': typeof PublicPostsPostIdDeepRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts': typeof PostsIndexRoute
-  '/posts/$postId/deep': typeof PostsPostIdDeepRoute
+  '/': typeof PublicIndexRoute
+  '/app': typeof AppIndexRoute
+  '/posts/$postId': typeof PublicPostsPostIdRoute
+  '/posts': typeof PublicPostsIndexRoute
+  '/posts/$postId/deep': typeof PublicPostsPostIdDeepRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/posts': typeof PostsRouteWithChildren
-  '/posts/$postId': typeof PostsPostIdRoute
-  '/posts/': typeof PostsIndexRoute
-  '/posts_/$postId/deep': typeof PostsPostIdDeepRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
+  '/_public/posts': typeof PublicPostsRouteWithChildren
+  '/_public/': typeof PublicIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/_public/posts/$postId': typeof PublicPostsPostIdRoute
+  '/_public/posts/': typeof PublicPostsIndexRoute
+  '/_public/posts_/$postId/deep': typeof PublicPostsPostIdDeepRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/app'
+    | ''
     | '/posts'
+    | '/'
+    | '/app/'
     | '/posts/$postId'
     | '/posts/'
     | '/posts/$postId/deep'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/posts/$postId' | '/posts' | '/posts/$postId/deep'
+  to: '/' | '/app' | '/posts/$postId' | '/posts' | '/posts/$postId/deep'
   id:
     | '__root__'
-    | '/'
-    | '/posts'
-    | '/posts/$postId'
-    | '/posts/'
-    | '/posts_/$postId/deep'
+    | '/app'
+    | '/_public'
+    | '/_public/posts'
+    | '/_public/'
+    | '/app/'
+    | '/_public/posts/$postId'
+    | '/_public/posts/'
+    | '/_public/posts_/$postId/deep'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  PostsRoute: typeof PostsRouteWithChildren
-  PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  PostsRoute: PostsRouteWithChildren,
-  PostsPostIdDeepRoute: PostsPostIdDeepRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -171,31 +252,51 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/posts",
-        "/posts_/$postId/deep"
+        "/app",
+        "/_public"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/posts": {
-      "filePath": "posts.tsx",
+    "/app": {
+      "filePath": "app/route.tsx",
       "children": [
-        "/posts/$postId",
-        "/posts/"
+        "/app/"
       ]
     },
-    "/posts/$postId": {
-      "filePath": "posts.$postId.tsx",
-      "parent": "/posts"
+    "/_public": {
+      "filePath": "_public.tsx",
+      "children": [
+        "/_public/posts",
+        "/_public/",
+        "/_public/posts_/$postId/deep"
+      ]
     },
-    "/posts/": {
-      "filePath": "posts.index.tsx",
-      "parent": "/posts"
+    "/_public/posts": {
+      "filePath": "_public/posts.tsx",
+      "parent": "/_public",
+      "children": [
+        "/_public/posts/$postId",
+        "/_public/posts/"
+      ]
     },
-    "/posts_/$postId/deep": {
-      "filePath": "posts_.$postId.deep.tsx"
+    "/_public/": {
+      "filePath": "_public/index.tsx",
+      "parent": "/_public"
+    },
+    "/app/": {
+      "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/_public/posts/$postId": {
+      "filePath": "_public/posts.$postId.tsx",
+      "parent": "/_public/posts"
+    },
+    "/_public/posts/": {
+      "filePath": "_public/posts.index.tsx",
+      "parent": "/_public/posts"
+    },
+    "/_public/posts_/$postId/deep": {
+      "filePath": "_public/posts_.$postId.deep.tsx",
+      "parent": "/_public"
     }
   }
 }
