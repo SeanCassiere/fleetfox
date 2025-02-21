@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
+    "build:production": "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$URL\" > dist/.env.local",
+    "build:deploy-preview": "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$DEPLOY_PRIME_URL\" > dist/.env.local",
     "build": "vinxi build --preset=netlify",
     "start": "vinxi start",
     "test": "echo \"Error: no test specified\"",

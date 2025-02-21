@@ -1,5 +1,5 @@
 [context.production]
-  command = "pnpm run build && mkdir dist && echo \"PUBLIC_DEPLOY_URL=$URL\" > dist/.env.local"
+  command = "pnpm run build:production"
 
 [context.deploy-preview]
-  command = "pnpm run build && mkdir dist && echo \"PUBLIC_DEPLOY_URL=$DEPLOY_PRIME_URL\" > dist/.env.local"
+  command = "pnpm run build:deploy-preview"
