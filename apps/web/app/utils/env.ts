@@ -15,7 +15,7 @@ function getEnvValue(key: string): string {
   return import.meta.env[key] || process.env[key];
 }
 
-export const DEPLOY_URL =
+export const getDeployURL = () =>
   getEnvValue('CONTEXT') === 'production'
     ? getEnvValue('URL')
     : getEnvValue('CONTEXT') === 'deploy-preview'

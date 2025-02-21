@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import { DEPLOY_URL } from '~/utils/env';
+import { getDeployURL } from '~/utils/env';
 
 const getTestSecretKey = createServerFn().handler(() => {
-  const secretKey = DEPLOY_URL;
+  const secretKey = getDeployURL();
   return { secretKey };
 });
 
