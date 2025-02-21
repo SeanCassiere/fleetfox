@@ -1,5 +1,5 @@
 [context.branch-deploy]
-  environment = { PUBLIC_DEPLOY_URL = $DEPLOY_URL }
+  environment = { PUBLIC_DEPLOY_URL = "$DEPLOY_URL" }
 
 [context.production]
-  environment = { PUBLIC_DEPLOY_URL = $URL }
+  environment = { PUBLIC_DEPLOY_URL = "$URL" }
