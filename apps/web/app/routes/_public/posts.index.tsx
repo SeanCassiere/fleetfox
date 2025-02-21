@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import { env } from '~/utils/env';
+import { env } from '~/lib/utils/env';
 
 const getSecretKey = createServerFn().handler(() => {
   const SECRET_KEY = env.SECRET_VALUE;
