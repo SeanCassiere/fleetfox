@@ -1,0 +1,5 @@
+[context.production]
+  command = "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$URL\" > .env.local"
+
+[context.deploy-preview]
+  command = "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$DEPLOY_PRIME_URL\" > .env.local"
