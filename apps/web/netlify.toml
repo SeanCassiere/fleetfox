@@ -1,5 +1,5 @@
 [context.production]
-  command = "pnpm run production:build"
+  command = "pnpm run production:build --filter @fleetfox/web"
 
 [context.deploy-preview]
-  command = "pnpm run deploy-preview:build"
+  command = "pnpm run deploy-preview:build --filter @fleetfox/web"
