@@ -1,13 +1,13 @@
+import * as React from 'react';
 import {
-  Link,
   Outlet,
   createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import * as React from 'react';
 import type { QueryClient } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
 import appCss from '~/styles/app.css?url';
@@ -91,6 +91,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body suppressHydrationWarning>
+        <Toaster position="bottom-center" closeButton richColors />
         {children}
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
