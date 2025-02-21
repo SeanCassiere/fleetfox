@@ -10,7 +10,10 @@ const serverEnvSchema = z.object({
 const viteEnvSchema = z.object({
   MODE: z.string().optional().default('development'),
   SSR: z.boolean().optional().default(false),
-  VITE_DEPLOY_URL: z.string().optional().default('http://localhost:3000'),
+  VITE_PUBLIC_DEPLOY_URL: z
+    .string()
+    .optional()
+    .default('http://localhost:3000'),
 });
 
 // Validate and parse environment variables

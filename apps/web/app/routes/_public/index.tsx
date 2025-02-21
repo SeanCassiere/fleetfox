@@ -9,7 +9,7 @@ function Home() {
   return (
     <div className="p-2">
       <h3>Welcome Home!!!</h3>
-      <p>{env.VITE_DEPLOY_URL}</p>
+      <p>{env.VITE_PUBLIC_DEPLOY_URL}</p>
     </div>
   );
 }
