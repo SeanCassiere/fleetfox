@@ -1,5 +1,5 @@
 [context.branch-deploy]
-  command = 'PUBLIC_DEPLOY_URL=$DEPLOY_URL pnpm run build'
+  command = 'export PUBLIC_DEPLOY_URL=$DEPLOY_URL && pnpm run build'
 
 [context.production]
-  command = 'PUBLIC_DEPLOY_URL=$URL pnpm run build'
+  command = 'export PUBLIC_DEPLOY_URL=$URL && pnpm run build'
