@@ -12,7 +12,9 @@
     "lint": "turbo lint",
     "check-types": "turbo check-types",
     "build": "turbo build",
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "web:build:production": "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$URL\" > apps/web/dist/.env.local",
+    "web:build:deploy-preview": "pnpm run build && echo \"PUBLIC_DEPLOY_URL=$DEPLOY_PRIME_URL\" > apps/web/dist/.env.local"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
