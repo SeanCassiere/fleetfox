@@ -3,18 +3,20 @@ import { z } from 'zod';
 // Define server-only schema
 const serverEnvSchema = z.object({
   NODE_ENV: z.string().optional().default('development'),
-  PUBLIC_DEPLOY_URL: z.string().optional().default('http://localhost:3000'),
 });
 
 // Define client schema
 const viteEnvSchema = z.object({
   MODE: z.string().optional().default('development'),
   SSR: z.boolean().optional().default(false),
-  VITE_PUBLIC_DEPLOY_URL: z
-    .string()
-    .optional()
-    .default('http://localhost:3000'),
 });
+
+export const DEPLOY_URL =
+  process.env.CONTEXT === 'production'
+    ? process.env.URL
+    : process.env.CONTEXT === 'deploy-preview'
+      ? process.env.DEPLOY_PRIME_URL
+      : 'https://localhost:3000';
 
 // Validate and parse environment variables
 const parsedServerEnv = import.meta.env.SSR
