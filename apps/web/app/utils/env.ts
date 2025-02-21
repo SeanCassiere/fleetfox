@@ -3,6 +3,7 @@ import { z } from 'zod';
 // Define server-only schema
 const serverEnvSchema = z.object({
   NODE_ENV: z.string().optional().default('development'),
+  SECRET_VALUE: z.string().optional().default('CHANGE_ME'),
 });
 
 // Define client schema
@@ -10,17 +11,6 @@ const viteEnvSchema = z.object({
   MODE: z.string().optional().default('development'),
   SSR: z.boolean().optional().default(false),
 });
-
-function getEnvValue(key: string): string {
-  return import.meta.env[key] || process.env[key];
-}
-
-export const getDeployURL = () =>
-  getEnvValue('CONTEXT') === 'production'
-    ? getEnvValue('URL')
-    : getEnvValue('CONTEXT') === 'deploy-preview'
-      ? getEnvValue('DEPLOY_PRIME_URL')
-      : 'https://localhost:3000';
 
 // Validate and parse environment variables
 const parsedServerEnv = import.meta.env.SSR
