@@ -12,7 +12,8 @@
     "lint": "turbo lint",
     "check-types": "turbo check-types",
     "build": "turbo build",
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "format": "prettier --write \"**/*.{ts,tsx,css,md}\""
   },
   "devDependencies": {
     "@types/node": "catalog:",

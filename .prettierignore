@@ -1,0 +1,7 @@
+**/routeTree.gen.ts
+**/pnpm-lock.yaml
+**/build/*
+**/dist/*
+**/.vinxi/*
+**/.netlify/*
+**/.output/*
