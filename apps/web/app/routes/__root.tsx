@@ -6,8 +6,8 @@ import {
   Scripts,
 } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import type { QueryClient } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
+import type { QueryClient } from '@tanstack/react-query';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
 import appCss from '~/styles/app.css?url';
