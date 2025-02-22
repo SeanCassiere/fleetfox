@@ -4,30 +4,75 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  typescript: ^5.7.3
+catalogs:
+  default:
+    '@eslint/js':
+      specifier: ^9.20.0
+      version: 9.21.0
+    '@types/node':
+      specifier: ^22.13.4
+      version: 22.13.4
+    eslint:
+      specifier: ^9.20.0
+      version: 9.21.0
+    eslint-config-prettier:
+      specifier: ^10.0.1
+      version: 10.0.1
+    eslint-plugin-import-x:
+      specifier: ^4.6.1
+      version: 4.6.1
+    eslint-plugin-react:
+      specifier: ^7.37.4
+      version: 7.37.4
+    eslint-plugin-react-hooks:
+      specifier: ^5.1.0
+      version: 5.1.0
+    eslint-plugin-turbo:
+      specifier: ^2.3.4
+      version: 2.4.2
+    globals:
+      specifier: ^16.0.0
+      version: 16.0.0
+    prettier:
+      specifier: ^3.5.1
+      version: 3.5.1
+    rimraf:
+      specifier: ^6.0.1
+      version: 6.0.1
+    turbo:
+      specifier: ^2.4.2
+      version: 2.4.2
+    typescript:
+      specifier: ^5.7.3
+      version: 5.7.3
+    typescript-eslint:
+      specifier: ^8.24.0
+      version: 8.24.1
+    vitest:
+      specifier: ^3.0.6
+      version: 3.0.6
 
 importers:
 
   .:
     devDependencies:
       '@types/node':
-        specifier: ^22.13.4
+        specifier: 'catalog:'
         version: 22.13.4
       prettier:
-        specifier: ^3.5.1
+        specifier: 'catalog:'
         version: 3.5.1
       rimraf:
-        specifier: ^6.0.1
+        specifier: 'catalog:'
         version: 6.0.1
       turbo:
-        specifier: ^2.4.2
+        specifier: 'catalog:'
         version: 2.4.2
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.7.3
       vitest:
-        specifier: ^3.0.6
+        specifier: 'catalog:'
         version: 3.0.6(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   apps/web:
@@ -112,13 +157,13 @@ importers:
         specifier: ^19.0.3
         version: 19.0.4(@types/react@19.0.10)
       eslint:
-        specifier: ^9.20.0
+        specifier: 'catalog:'
         version: 9.21.0(jiti@2.4.2)
       tailwindcss:
         specifier: ^4.0.8
         version: 4.0.8
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.7.3
       vite-tsconfig-paths:
         specifier: ^5.1.4
@@ -127,34 +172,34 @@ importers:
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
-        specifier: ^9.20.0
+        specifier: 'catalog:'
         version: 9.21.0
       eslint:
-        specifier: ^9.20.0
+        specifier: 'catalog:'
         version: 9.21.0(jiti@2.4.2)
       eslint-config-prettier:
-        specifier: ^10.0.1
+        specifier: 'catalog:'
         version: 10.0.1(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-import-x:
-        specifier: ^4.6.1
+        specifier: 'catalog:'
         version: 4.6.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
       eslint-plugin-react:
-        specifier: ^7.37.4
+        specifier: 'catalog:'
         version: 7.37.4(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-react-hooks:
-        specifier: ^5.1.0
+        specifier: 'catalog:'
         version: 5.1.0(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-turbo:
-        specifier: ^2.3.4
+        specifier: 'catalog:'
         version: 2.4.2(eslint@9.21.0(jiti@2.4.2))(turbo@2.4.2)
       globals:
-        specifier: ^16.0.0
+        specifier: 'catalog:'
         version: 16.0.0
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.7.3
       typescript-eslint:
-        specifier: ^8.24.0
+        specifier: 'catalog:'
         version: 8.24.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
 
 packages:
@@ -1469,14 +1514,14 @@ packages:
     peerDependencies:
       '@typescript-eslint/parser': ^8.0.0 || ^8.0.0-alpha.0
       eslint: ^8.57.0 || ^9.0.0
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   '@typescript-eslint/parser@8.24.1':
     resolution: {integrity: sha512-Tqoa05bu+t5s8CTZFaGpCH2ub3QeT9YDkXbPd3uQ4SfsLoh1/vv2GEYAioPoxCWJJNsenXlC88tRjwoHNts1oQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   '@typescript-eslint/scope-manager@8.24.1':
     resolution: {integrity: sha512-OdQr6BNBzwRjNEXMQyaGyZzgg7wzjYKfX2ZBV3E04hUCBDv3GQCHiz9RpqdUIiVrMgJGkXm3tcEh4vFSHreS2Q==}
@@ -1487,7 +1532,7 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   '@typescript-eslint/types@8.24.1':
     resolution: {integrity: sha512-9kqJ+2DkUXiuhoiYIUvIYjGcwle8pcPpdlfkemGvTObzgmYfJ5d0Qm6jwb4NBXP9W1I5tss0VIAnWFumz3mC5A==}
@@ -1497,14 +1542,14 @@ packages:
     resolution: {integrity: sha512-UPyy4MJ/0RE648DSKQe9g0VDSehPINiejjA6ElqnFaFIhI6ZEiZAkUI0D5MCk0bQcTf/LVqZStvQ6K4lPn/BRg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   '@typescript-eslint/utils@8.24.1':
     resolution: {integrity: sha512-OOcg3PMMQx9EXspId5iktsI3eMaXVwlhC8BvNnX6B5w9a4dVgpkQZuU8Hy67TolKcl+iFWq0XX+jbDGN4xWxjQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   '@typescript-eslint/visitor-keys@8.24.1':
     resolution: {integrity: sha512-EwVHlp5l+2vp8CoqJm9KikPZgi3gbdZAtabKT9KPShGeOcJhsv4Zdo3oc8T8I0uKEmYoU4ItyxbptjF08enaxg==}
@@ -3101,7 +3146,7 @@ packages:
     resolution: {integrity: sha512-F7RXEeo/heF3O9lOXo2bNjCOtfp7u+D6W3a3VNEH2xE6v+fxLtn5nq0uvUcA1F5aT+CMhNeC5Uqtg5tlXFX/ag==}
     hasBin: true
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: ^5.x
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -3653,14 +3698,14 @@ packages:
     resolution: {integrity: sha512-dnlgjFSVetynI8nzgJ+qF62efpglpWRk8isUEWZGWlJYySCTD6aKvbUDu+zbPeDakk3bg5H4XpitHukgfL1m9w==}
     engines: {node: '>=18.12'}
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=4.8.4'
 
   tsconfck@3.1.5:
     resolution: {integrity: sha512-CLDfGgUp7XPswWnezWwsCRxNmgQjhYq3VXHM0/XIRxhVrKw0M1if9agzryh1QS3nxjCROvV+xWxoJO1YctzzWg==}
     engines: {node: ^18 || >=20}
     hasBin: true
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: ^5.0.0
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -3740,7 +3785,7 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
-      typescript: ^5.7.3
+      typescript: '>=4.8.4 <5.8.0'
 
   typescript@5.7.3:
     resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
