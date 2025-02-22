@@ -12,19 +12,16 @@
     "lint": "turbo lint",
     "check-types": "turbo check-types",
     "build": "turbo build",
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "prettier": "prettier --ignore-unknown .",
+    "prettier:write": "pnpm run prettier --write"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
-    "prettier": "^3.5.1",
-    "rimraf": "^6.0.1",
-    "turbo": "^2.4.2",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.6"
-  },
-  "pnpm": {
-    "overrides": {
-      "typescript": "$typescript"
-    }
+    "@types/node": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

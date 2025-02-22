@@ -3,12 +3,12 @@ import { z } from 'zod';
 // Define server-only schema
 const serverEnvSchema = z.object({
   NODE_ENV: z.string().optional().default('development'),
+  SECRET_VALUE: z.string().optional().default('CHANGE_ME'),
 });
 
 // Define client schema
 const viteEnvSchema = z.object({
   MODE: z.string().optional().default('development'),
-  PUBLIC_DEPLOY_URL: z.string().optional().default('http://localhost:3000'),
   SSR: z.boolean().optional().default(false),
 });
 

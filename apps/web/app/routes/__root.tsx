@@ -1,18 +1,18 @@
+import * as React from 'react';
 import {
-  Link,
   Outlet,
   createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import * as React from 'react';
+import { Toaster } from 'sonner';
 import type { QueryClient } from '@tanstack/react-query';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
 import appCss from '~/styles/app.css?url';
-import { seo } from '~/utils/seo';
-import { env } from '~/utils/env';
+import { seo } from '~/lib/utils/seo';
+import { env } from '~/lib/utils/env';
 
 const TanStackRouterDevtools =
   env.MODE === 'production'
@@ -86,31 +86,12 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body>
-        <div className="p-2 flex gap-2 text-lg">
-          <Link
-            to="/"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/posts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Posts
-          </Link>
-        </div>
-        <hr />
+      <body suppressHydrationWarning>
+        <Toaster position="bottom-center" closeButton richColors />
         {children}
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />

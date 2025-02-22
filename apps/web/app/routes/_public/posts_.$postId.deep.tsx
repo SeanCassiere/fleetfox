@@ -1,9 +1,9 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { postQueryOptions } from '../utils/posts';
+import { postQueryOptions } from '../../utils/posts';
 import { PostErrorComponent } from '~/components/posts';
 
-export const Route = createFileRoute('/posts_/$postId/deep')({
+export const Route = createFileRoute('/_public/posts_/$postId/deep')({
   loader: async ({ params: { postId }, context }) => {
     const data = await context.queryClient.ensureQueryData(
       postQueryOptions(postId),
