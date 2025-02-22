@@ -9,7 +9,7 @@
     "start": "vinxi start",
     "test": "echo \"Error: no test specified\"",
     "lint": "eslint --max-warnings 0",
-    "check-types": "echo \"Error: no check-types specified\""
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.2",
