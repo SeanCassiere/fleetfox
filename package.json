@@ -13,7 +13,8 @@
     "check-types": "turbo check-types",
     "build": "turbo build",
     "dev": "turbo dev",
-    "format": "prettier --write \"**/*.{ts,tsx,css,md}\""
+    "prettier": "prettier --ignore-unknown .",
+    "prettier:write": "pnpm run prettier --write"
   },
   "devDependencies": {
     "@types/node": "catalog:",

@@ -5,3 +5,6 @@
 **/.vinxi/*
 **/.netlify/*
 **/.output/*
+**/.turbo
+**/node_modules/*
+**/.git/*

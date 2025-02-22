@@ -7,7 +7,7 @@ on:
         description: run ci
         required: false
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
     types: [opened, synchronize]
 
@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v4.2.0
         with:
           node-version-file: .nvmrc
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Cache turbo build setup
         uses: actions/cache@v4.2.1
