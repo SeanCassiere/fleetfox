@@ -1,7 +1,7 @@
 import js from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import pluginTurbo from 'eslint-plugin-turbo';
 import tsEslint from 'typescript-eslint';
+import pluginTurbo from 'eslint-plugin-turbo';
 import pluginImport from 'eslint-plugin-import-x';
 
 /**
