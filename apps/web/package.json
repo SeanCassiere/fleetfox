@@ -40,7 +40,9 @@
     "@types/node": "catalog:",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "babel-plugin-react-compiler": "catalog:",
     "eslint": "catalog:",
+    "eslint-plugin-react-compiler": "catalog:",
     "tailwindcss": "^4.0.8",
     "typescript": "catalog:",
     "vite-tsconfig-paths": "^5.1.4"
