@@ -1,8 +1,9 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import * as schema from './schema';
+import { createDbId } from './create-db-id';
 import { env } from '~/lib/utils/env';
 
-export { createDbId } from './create-db-id';
+export { schema as tables, createDbId as createId };
 
 export const db = drizzle({
   connection: {
