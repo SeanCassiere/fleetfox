@@ -55,6 +55,7 @@ const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(() => {
 });
 
 function RouteComponent() {
+  const envMode = Route.useLoaderData({ select: (s) => s.mode });
   const authOptions = Route.useLoaderData({ select: (s) => s.options });
   const search = Route.useSearch();
   const githubLoginFn = useServerFn(githubLoginServerFn);
@@ -67,15 +68,22 @@ function RouteComponent() {
           <p>User did not grant access during login.</p>
         </div>
       ) : null}
-      {authOptions.includes('github') ? (
-        <Button
-          onClick={() => {
-            githubLoginFn();
-          }}
-        >
-          Login with GitHub
-        </Button>
+      {envMode === 'deploy-preview' || envMode === 'development' ? (
+        <div>
+          <code>{JSON.stringify(authOptions)}</code>
+        </div>
       ) : null}
+      <div>
+        {authOptions.includes('github') ? (
+          <Button
+            onClick={() => {
+              githubLoginFn();
+            }}
+          >
+            Login with GitHub
+          </Button>
+        ) : null}
+      </div>
     </div>
   );
 }
