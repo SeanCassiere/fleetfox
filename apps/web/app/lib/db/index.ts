@@ -2,6 +2,8 @@ import { drizzle } from 'drizzle-orm/libsql';
 import * as schema from './schema';
 import { env } from '~/lib/utils/env';
 
+export { createDbId } from './create-db-id';
+
 export const db = drizzle({
   connection: {
     url: env.WEB_TURSO_DATABASE_URL,
