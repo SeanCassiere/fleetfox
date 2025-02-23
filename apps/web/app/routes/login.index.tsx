@@ -7,8 +7,14 @@ import { Button } from '~/components/ui/button';
 import { githubOAuth, githubScopes } from '~/lib/auth';
 import { env } from '~/lib/utils/env';
 
+const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(() => {
+  const mode = env.MODE;
+  return { mode, options: ['github'] };
+});
+
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
+  loader: () => getAuthOptionsServerFn(),
   validateSearch: z.object({
     auth_prompt: z.string().optional(),
   }),
@@ -31,6 +37,7 @@ const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(() => {
 });
 
 function RouteComponent() {
+  const authOptions = Route.useLoaderData({ select: (s) => s.options });
   const search = Route.useSearch();
   const githubLoginFn = useServerFn(githubLoginServerFn);
 
@@ -42,13 +49,15 @@ function RouteComponent() {
           <p>User did not grant access during login.</p>
         </div>
       ) : null}
-      <Button
-        onClick={() => {
-          githubLoginFn();
-        }}
-      >
-        Login
-      </Button>
+      {authOptions.includes('github') ? (
+        <Button
+          onClick={() => {
+            githubLoginFn();
+          }}
+        >
+          Login with GitHub
+        </Button>
+      ) : null}
     </div>
   );
 }
