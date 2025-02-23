@@ -10,9 +10,12 @@
     "test": "echo \"Error: no test specified\"",
     "lint": "eslint --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env.local --"
+    "with-env": "dotenv -e ../../.env.local --",
+    "drizzle:studio": "pnpm with-env drizzle-kit studio",
+    "drizzle:push": "pnpm with-env drizzle-kit push"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@tanstack/react-query": "^5.66.9",
@@ -23,6 +26,7 @@
     "@tanstack/start": "^1.111.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.39.3",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -42,7 +46,9 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "babel-plugin-react-compiler": "catalog:",
+    "dotenv": "catalog:",
     "dotenv-cli": "catalog:",
+    "drizzle-kit": "^0.30.4",
     "eslint": "catalog:",
     "eslint-plugin-react-compiler": "catalog:",
     "tailwindcss": "^4.0.8",
