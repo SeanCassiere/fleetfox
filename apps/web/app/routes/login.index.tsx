@@ -20,7 +20,13 @@ const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
     console.log('user-agent', userAgent);
 
     const mode = await getModeServerFn();
-    return { mode, options: ['github'] };
+    return {
+      mode,
+      options:
+        mode === 'deploy-preview'
+          ? ['github', 'email:credentials']
+          : ['github'],
+    };
   },
 );
 

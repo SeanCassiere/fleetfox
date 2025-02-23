@@ -9,6 +9,7 @@ export const dbPrefixes = {
 
 const dbEnv = {
   live: '',
+  deploy: 'deploy',
   dev: 'dev',
 } as const;
 
@@ -32,5 +33,11 @@ export function joinDbId(...ids: string[]) {
 }
 
 export function getDbEnvKey() {
-  return dbEnv[env.MODE === 'production' ? 'live' : 'dev'];
+  return dbEnv[
+    env.MODE === 'production'
+      ? 'live'
+      : env.MODE === 'deploy-preview'
+        ? 'deploy'
+        : 'dev'
+  ];
 }
