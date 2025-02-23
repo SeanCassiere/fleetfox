@@ -1,6 +1,6 @@
 import { useServerFn, createServerFn } from '@tanstack/start';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { setCookie } from '@tanstack/start/server';
+import { setCookie, getEvent } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
 import { Button } from '~/components/ui/button';
@@ -10,6 +10,12 @@ import { getModeServerFn } from '~/lib/server/env-server-functions';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
+    const event = getEvent();
+
+    const userAgent = event.headers.get('user-agent');
+
+    console.log('user-agent', userAgent);
+
     const mode = await getModeServerFn();
     return { mode, options: ['github'] };
   },
