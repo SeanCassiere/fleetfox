@@ -4,6 +4,7 @@ import { z } from 'zod';
 const serverEnvSchema = z.object({
   NODE_ENV: z.string().optional().default('development'),
   SECRET_VALUE: z.string().optional().default('CHANGE_ME'),
+  WEB_DB_URL: z.string(),
 });
 
 // Define client schema

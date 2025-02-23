@@ -4,7 +4,7 @@ import { env } from '~/lib/utils/env';
 
 export const APIRoute = createAPIFileRoute('/api/test-secret-key')({
   GET: () => {
-    const SECRET_VALUE = env.SECRET_VALUE;
+    const SECRET_VALUE = env.WEB_DB_URL;
     return json({ SECRET_VALUE });
   },
 });
