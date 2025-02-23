@@ -20,5 +20,6 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": ["NODE_ENV", "WEB_TURSO_DATABASE_URL", "WEB_TURSO_AUTH_TOKEN"]
 }

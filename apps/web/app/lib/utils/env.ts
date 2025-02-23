@@ -4,6 +4,8 @@ import { z } from 'zod';
 const serverEnvSchema = z.object({
   NODE_ENV: z.string().optional().default('development'),
   SECRET_VALUE: z.string().optional().default('CHANGE_ME'),
+  WEB_TURSO_DATABASE_URL: z.string(),
+  WEB_TURSO_AUTH_TOKEN: z.string().optional().default('CHANGE_ME'),
 });
 
 // Define client schema

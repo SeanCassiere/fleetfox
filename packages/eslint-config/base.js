@@ -39,10 +39,7 @@ export const baseConfig = [
       turbo: pluginTurbo,
     },
     rules: {
-      'turbo/no-undeclared-env-vars': [
-        'warn',
-        { allowList: ['SSR', 'DEV', 'NODE_ENV'] },
-      ],
+      'turbo/no-undeclared-env-vars': ['warn', { allowList: ['SSR', 'DEV'] }],
     },
   },
   {
@@ -80,8 +77,5 @@ export const baseConfig = [
         },
       ],
     },
-  },
-  {
-    ignores: ['dist/**'],
   },
 ];
