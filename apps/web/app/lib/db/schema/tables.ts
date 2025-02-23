@@ -10,11 +10,11 @@ export const tenants = sqliteTable('tenant', {
   workspace: text().notNull().unique(),
   createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
-    .$default(() => new Date()),
+    .$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
-    .$default(() => new Date())
-    .$onUpdate(() => new Date()),
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date()),
 });
 
 export const accounts = sqliteTable('account', {
@@ -26,11 +26,11 @@ export const accounts = sqliteTable('account', {
   password: text(),
   createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
-    .$default(() => new Date()),
+    .$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
-    .$default(() => new Date())
-    .$onUpdate(() => new Date()),
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date()),
 });
 
 export const accountToTenant = sqliteTable(
@@ -50,7 +50,7 @@ export const accountToTenant = sqliteTable(
       }),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .notNull()
-      .$default(() => new Date()),
+      .$defaultFn(() => new Date()),
   },
   (table) => [
     primaryKey({
@@ -74,11 +74,11 @@ export const oauthConnections = sqliteTable(
     avatarUrl: text('avatar_url'),
     createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .notNull()
-      .$default(() => new Date()),
+      .$defaultFn(() => new Date()),
     updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .notNull()
-      .$default(() => new Date())
-      .$onUpdate(() => new Date()),
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date()),
   },
   (table) => [
     primaryKey({
@@ -87,3 +87,21 @@ export const oauthConnections = sqliteTable(
     }),
   ],
 );
+
+export const sessions = sqliteTable('session', {
+  id: text().primaryKey(),
+  accountId: text('account_id')
+    .notNull()
+    .references(() => accounts.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+    }),
+  expiresAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date()),
+});

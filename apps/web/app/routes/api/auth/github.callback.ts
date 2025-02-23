@@ -1,11 +1,13 @@
 import { json } from '@tanstack/start';
 import { createAPIFileRoute } from '@tanstack/start/api';
-import { getCookie } from '@tanstack/start/server';
+import { getCookie, setCookie, deleteCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { githubOAuth } from '~/lib/auth';
+import { createSessionId, setSession } from '~/lib/auth/db';
 import { createId, db, tables } from '~/lib/db';
+import { env } from '~/lib/utils/env';
 
 const githubProfileSchema = z.object({
   id: z.coerce.string(),
@@ -37,7 +39,7 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
 
     const code = url.searchParams.get('code');
     const state = url.searchParams.get('state');
-    const cookieState = getCookie('github_oauth_state');
+    const cookieState = getCookie('auth_github_oauth_state');
 
     if (!code || !state || !cookieState || state !== cookieState) {
       return new Response(null, { status: 400 });
@@ -121,11 +123,14 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
       emailVerified: githubEmail.verified,
     };
 
+    let accountId: string;
+
     try {
       // Check if the account already exists
       const existingAccount = await getAccount(parsedUser.email);
 
       if (existingAccount) {
+        accountId = existingAccount.id;
         // Check if existing oauth account exists, if so, exit early.
         const oauthAccounts = await getOauthConnections(existingAccount.id);
         const existingGithubOauthAccount = oauthAccounts.find(
@@ -183,25 +188,22 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
             });
           }
         }
-
-        // set session cookie
-        //
-        //
-        //
       } else {
         // If account does not exist, write to the database
-        const accountId = createId('account');
-        const tenantId = createId('tenant');
+        const dbAccountId = createId('account');
+        const dbTenantId = createId('tenant');
+
+        accountId = dbAccountId;
 
         await db.transaction(async (tx) => {
           // create tenant
           await tx
             .insert(tables.tenants)
-            .values({ id: tenantId, workspace: tenantId });
+            .values({ id: dbTenantId, workspace: dbTenantId });
 
           // create account
           await tx.insert(tables.accounts).values({
-            id: accountId,
+            id: dbAccountId,
             name: parsedUser.name || parsedUser.login,
             email: parsedUser.email,
             emailVerified: parsedUser.emailVerified,
@@ -210,26 +212,46 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
 
           // create link to tenant
           await tx.insert(tables.accountToTenant).values({
-            accountId,
-            tenantId,
+            accountId: dbAccountId,
+            tenantId: dbTenantId,
           });
 
           // create oauth account
           await tx.insert(tables.oauthConnections).values({
-            accountId,
+            accountId: dbAccountId,
             provider: 'github',
             providerId: parsedUser.id,
             avatarUrl: parsedUser.avatar_url,
           });
         });
       }
+    } catch (error) {
+      console.error(error);
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/login?auth_prompt=authentication_failed' },
+      });
+    }
 
-      // set session cookie
-      //
-      //
-      //
+    try {
+      const sessionId = createSessionId();
+
+      setSession({
+        id: sessionId,
+        accountId: accountId,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+      });
+
+      setCookie('auth_session_id', sessionId, {
+        path: '/',
+        httpOnly: true,
+        secure: env.MODE !== 'development',
+        sameSite: 'lax',
+      });
+      deleteCookie('auth_github_oauth_state');
 
       return json({
+        sessionId,
         profile: githubProfile,
         emails: githubEmail,
       });

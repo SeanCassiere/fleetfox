@@ -7,7 +7,8 @@ export const tenants_relations = relations(tables.tenants, ({ many }) => ({
 
 export const accounts_relations = relations(tables.accounts, ({ many }) => ({
   accountToTenants: many(tables.accountToTenant),
-  oauthAccounts: many(tables.oauthConnections),
+  oauthConnections: many(tables.oauthConnections),
+  sessions: many(tables.sessions),
 }));
 
 export const accountToTenant_relations = relations(
@@ -33,3 +34,10 @@ export const oauthConnections_relations = relations(
     }),
   }),
 );
+
+export const session_relations = relations(tables.sessions, ({ one }) => ({
+  account: one(tables.accounts, {
+    fields: [tables.sessions.accountId],
+    references: [tables.accounts.id],
+  }),
+}));

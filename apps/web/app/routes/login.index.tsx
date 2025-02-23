@@ -1,6 +1,6 @@
 import { useServerFn, createServerFn } from '@tanstack/start';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { setCookie, getEvent } from '@tanstack/start/server';
+import { setCookie, getEvent, getCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
 import { Button } from '~/components/ui/button';
@@ -14,6 +14,9 @@ const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
 
     const userAgent = event.headers.get('user-agent');
 
+    const sessionId = getCookie('auth_session_id');
+
+    console.log('session-id', sessionId);
     console.log('user-agent', userAgent);
 
     const mode = await getModeServerFn();
@@ -35,9 +38,9 @@ const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(() => {
     state,
     githubScopes,
   );
-  setCookie('github_oauth_state', state, {
+  setCookie('auth_github_oauth_state', state, {
     path: '/',
-    secure: env.MODE === 'production',
+    secure: env.MODE !== 'development',
     httpOnly: true,
     maxAge: 60 * 10 /* 10 minutes */,
   });

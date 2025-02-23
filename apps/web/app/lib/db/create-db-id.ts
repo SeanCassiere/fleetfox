@@ -1,15 +1,16 @@
 import { createId } from '@paralleldrive/cuid2';
 import { env } from '~/lib/utils/env';
 
-const dbPrefixes = {
+export const dbPrefixes = {
   account: 'acc',
   tenant: 'ten',
+  session: 'ses',
 } as const;
 
 const dbEnv = {
   live: '',
   dev: 'dev',
-};
+} as const;
 
 /**
  * Returns a unique database ID
@@ -18,15 +19,18 @@ const dbEnv = {
  * @returns
  * @example
  * ```ts
- * createDbId("account", "live");
+ * createDbId("account");
  * //=> "acc_01B1E5Z5KQZ
  * ```
  */
-export const createDbId = (
-  key_prefix: keyof typeof dbPrefixes,
-  key_env: keyof typeof dbEnv = env.MODE === 'production' ? 'live' : 'dev',
-) => {
-  return [dbEnv[key_env], dbPrefixes[key_prefix], createId()]
-    .filter(Boolean)
-    .join('_');
-};
+export function createDbId(key_prefix: keyof typeof dbPrefixes) {
+  return joinDbId(getDbEnvKey(), dbPrefixes[key_prefix], createId());
+}
+
+export function joinDbId(...ids: string[]) {
+  return ids.filter(Boolean).join('_');
+}
+
+export function getDbEnvKey() {
+  return dbEnv[env.MODE === 'production' ? 'live' : 'dev'];
+}
