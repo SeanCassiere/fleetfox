@@ -6,11 +6,14 @@ import { z } from 'zod';
 import { Button } from '~/components/ui/button';
 import { githubOAuth, githubScopes } from '~/lib/auth';
 import { env } from '~/lib/utils/env';
+import { getModeServerFn } from '~/lib/server/env-server-functions';
 
-const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(() => {
-  const mode = env.MODE;
-  return { mode, options: ['github'] };
-});
+const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const mode = await getModeServerFn();
+    return { mode, options: ['github'] };
+  },
+);
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
