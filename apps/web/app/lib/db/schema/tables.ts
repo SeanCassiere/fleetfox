@@ -1,4 +1,3 @@
-import { sql } from 'drizzle-orm';
 import {
   sqliteTable,
   text,
@@ -9,13 +8,13 @@ import {
 export const tenants = sqliteTable('tenant', {
   id: text().primaryKey(),
   workspace: text().notNull().unique(),
-  createdAt: text('created_at')
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text('updated_at')
+    .$default(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+    .$default(() => new Date())
+    .$onUpdate(() => new Date()),
 });
 
 export const accounts = sqliteTable('account', {
@@ -25,13 +24,13 @@ export const accounts = sqliteTable('account', {
   emailVerified: integer('email_verified', { mode: 'boolean' }).notNull(),
   avatarUrl: text('avatar_url'),
   password: text(),
-  createdAt: text('created_at')
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text('updated_at')
+    .$default(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+    .$default(() => new Date())
+    .$onUpdate(() => new Date()),
 });
 
 export const accountToTenant = sqliteTable(
@@ -49,9 +48,9 @@ export const accountToTenant = sqliteTable(
         onDelete: 'cascade',
         onUpdate: 'cascade',
       }),
-    createdAt: text('created_at')
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
+      .$default(() => new Date()),
   },
   (table) => [
     primaryKey({
@@ -73,13 +72,13 @@ export const oauthConnections = sqliteTable(
     provider: text().notNull(),
     providerId: text('provider_id').notNull(),
     avatarUrl: text('avatar_url'),
-    createdAt: text('created_at')
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
       .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: text('updated_at')
+      .$default(() => new Date()),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
       .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+      .$default(() => new Date())
+      .$onUpdate(() => new Date()),
   },
   (table) => [
     primaryKey({
