@@ -117,7 +117,12 @@ export const Route = createFileRoute('/login/')({
 
 const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
   async () => {
-    await import('node:crypto');
+    const crypto = await import('node:crypto');
+    Object.defineProperty(global.self, 'crypto', {
+      value: {
+        subtle: crypto.webcrypto.subtle,
+      },
+    });
     const state = arctic.generateState();
     const authorizationUrl = githubOAuth.createAuthorizationURL(
       state,
