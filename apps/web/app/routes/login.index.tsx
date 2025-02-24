@@ -149,7 +149,9 @@ function RouteComponent() {
                         onClick={() => {
                           try {
                             githubLoginServerFn().then((r) => {
-                              console.log(r.authUrl);
+                              const anchor = document.createElement('a');
+                              anchor.href = r.authUrl;
+                              anchor.click();
                             });
                           } catch (e) {
                             const message = e instanceof Error && e.message;

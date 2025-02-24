@@ -6,12 +6,12 @@ import {
 import { getRouterManifest } from '@tanstack/start/router-manifest';
 
 import { createRouter } from './router';
-import { polyfillWebCrypto } from './lib/utils/web-crypto';
+import { serverPolyfill } from './lib/utils/polyfill';
 
 export default createStartHandler({
   createRouter,
   getRouterManifest,
 })(async (args) => {
-  await polyfillWebCrypto();
+  await serverPolyfill();
   return defaultStreamHandler(args);
 });
