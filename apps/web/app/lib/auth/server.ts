@@ -1,7 +1,32 @@
+import * as arctic from 'arctic';
 import { redirect } from '@tanstack/react-router';
 import { createMiddleware, createServerFn } from '@tanstack/start';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
-import { deleteSession, getSessionAndAccount } from '~/lib/auth';
+import {
+  deleteSession,
+  getSessionAndAccount,
+  githubOAuth,
+  githubScopes,
+} from '~/lib/auth';
+import { env } from '~/lib/utils/env';
+
+export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    const state = arctic.generateState();
+    const authorizationUrl = githubOAuth.createAuthorizationURL(
+      state,
+      githubScopes,
+    );
+    setCookie('auth_github_oauth_state', state, {
+      path: '/',
+      secure: env.MODE !== 'development',
+      httpOnly: true,
+      maxAge: 60 * 10 /* 10 minutes */,
+    });
+
+    return { authUrl: authorizationUrl.href };
+  },
+);
 
 export const userServerMiddleware = createMiddleware().server(
   async ({ next }) => {

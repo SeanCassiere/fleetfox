@@ -1,22 +1,12 @@
-import { createServerFn } from '@tanstack/start';
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/start';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
-import * as arctic from 'arctic';
-import { z } from 'zod';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import type { SVGProps } from 'react';
+import { Alert, AlertDescription } from '~/components/ui/alert';
 import { Button } from '~/components/ui/button';
-import {
-  createSessionId,
-  githubOAuth,
-  githubScopes,
-  setSession,
-  verifyLogin,
-} from '~/lib/auth';
-import { env } from '~/lib/utils/env';
-import { getModeServerFn } from '~/lib/server/env-server-functions';
-import { checkAuthServerFn } from '~/lib/auth/server';
 import {
   Card,
   CardContent,
@@ -24,10 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card';
-import { cn } from '~/lib/utils';
-import { Label } from '~/components/ui/label';
 import { Input } from '~/components/ui/input';
-import { Alert, AlertDescription } from '~/components/ui/alert';
+import { Label } from '~/components/ui/label';
+import { createSessionId, setSession, verifyLogin } from '~/lib/auth';
+import { checkAuthServerFn, githubLoginServerFn } from '~/lib/auth/server';
+import { getModeServerFn } from '~/lib/server/env-server-functions';
+import { cn } from '~/lib/utils';
+import { env } from '~/lib/utils/env';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -114,24 +107,6 @@ export const Route = createFileRoute('/login/')({
     auth_prompt: z.string().optional(),
   }),
 });
-
-const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
-  async () => {
-    const state = arctic.generateState();
-    const authorizationUrl = githubOAuth.createAuthorizationURL(
-      state,
-      githubScopes,
-    );
-    setCookie('auth_github_oauth_state', state, {
-      path: '/',
-      secure: env.MODE !== 'development',
-      httpOnly: true,
-      maxAge: 60 * 10 /* 10 minutes */,
-    });
-
-    return { authUrl: authorizationUrl.href };
-  },
-);
 
 function RouteComponent() {
   const authOptions = Route.useLoaderData({ select: (s) => s.options });
