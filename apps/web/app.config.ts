@@ -1,5 +1,6 @@
 import { defineConfig } from '@tanstack/start/config';
 import tsConfigPaths from 'vite-tsconfig-paths';
+import { nodeless } from 'unenv';
 
 export default defineConfig({
   vite: {
@@ -13,5 +14,8 @@ export default defineConfig({
     babel: {
       plugins: [['babel-plugin-react-compiler', { target: '19' }]],
     },
+  },
+  server: {
+    unenv: nodeless,
   },
 });
