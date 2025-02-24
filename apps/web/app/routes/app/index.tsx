@@ -1,9 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/app/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/app/" index!</div>;
+  const appLoaderData = useLoaderData({ from: '/app' });
+  return (
+    <div>
+      <div>Hello "/app/" index!</div>
+      <div>
+        <code>
+          <pre>{JSON.stringify(appLoaderData, null, 2)}</pre>
+        </code>
+      </div>
+    </div>
+  );
 }

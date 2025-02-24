@@ -10,6 +10,7 @@ const serverEnvSchema = z.object({
   WEB_TURSO_DATABASE_URL: z.string(),
   WEB_TURSO_AUTH_TOKEN: z.string().optional().default('CHANGE_ME'),
   WEB_GITHUB_CLIENT_ID: z.string(),
+  WEB_SHOW_AUTH_EMAIL_CREDENTIALS: z.enum(['1', '0']).optional().default('0'),
   WEB_GITHUB_CLIENT_SECRET: z.string(),
 });
 

@@ -40,11 +40,6 @@ function RouteComponent() {
         <ul className="p-2 flex gap-2 text-lg">
           <li>
             <Button asChild>
-              <Link to="/login">Go to login page</Link>
-            </Button>
-          </li>
-          <li>
-            <Button asChild>
               <Link to="/app">Go to app</Link>
             </Button>
           </li>

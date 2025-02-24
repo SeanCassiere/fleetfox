@@ -256,6 +256,7 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
         httpOnly: true,
         secure: env.MODE !== 'development',
         sameSite: 'lax',
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
       });
       deleteCookie('auth_github_oauth_state');
 

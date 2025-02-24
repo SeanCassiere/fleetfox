@@ -21,12 +21,15 @@ export function createSessionId(): string {
   );
 }
 
-export type DatabaseAccount = typeof tables.accounts.$inferSelect;
+export type DatabaseAccount = Omit<
+  typeof tables.accounts.$inferSelect,
+  'password'
+>;
 export type DatabaseSession = typeof tables.sessions.$inferSelect;
 
 export async function getSessionAndAccount(
   sessionId: string,
-): Promise<[DatabaseSession, DatabaseAccount] | null> {
+): Promise<{ session: DatabaseSession; account: DatabaseAccount } | null> {
   const result = await db.query.sessions.findFirst({
     where(fields, operators) {
       return operators.eq(fields.id, sessionId);
@@ -38,8 +41,11 @@ export async function getSessionAndAccount(
     return null;
   }
 
-  const { account, ...session } = result;
-  return [session, account];
+  const {
+    account: { password, ...account },
+    ...session
+  } = result;
+  return { session, account };
 }
 
 export async function getAccountSessions(

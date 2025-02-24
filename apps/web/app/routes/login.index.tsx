@@ -1,38 +1,38 @@
 import { useServerFn, createServerFn } from '@tanstack/start';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { setCookie, getEvent, getCookie } from '@tanstack/start/server';
+import { setCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
 import { Button } from '~/components/ui/button';
 import { githubOAuth, githubScopes } from '~/lib/auth';
 import { env } from '~/lib/utils/env';
 import { getModeServerFn } from '~/lib/server/env-server-functions';
+import { checkAuthServerFn } from '~/lib/auth/server';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const event = getEvent();
-
-    const userAgent = event.headers.get('user-agent');
-
-    const sessionId = getCookie('auth_session_id');
-
-    console.log('session-id', sessionId);
-    console.log('user-agent', userAgent);
-
     const mode = await getModeServerFn();
     return {
       mode,
-      options:
-        mode === 'deploy-preview'
-          ? ['github', 'email:credentials']
-          : ['github'],
+      options: [
+        'github',
+        env.WEB_SHOW_AUTH_EMAIL_CREDENTIALS === '1' && 'credentials:email',
+      ].filter(Boolean),
     };
   },
 );
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
-  loader: () => getAuthOptionsServerFn(),
+  loader: async () => {
+    const auth = await checkAuthServerFn();
+    if (auth.status === 'proceed') {
+      throw redirect({ to: '/app' });
+    }
+
+    const res = await getAuthOptionsServerFn();
+    return res;
+  },
   validateSearch: z.object({
     auth_prompt: z.string().optional(),
   }),
