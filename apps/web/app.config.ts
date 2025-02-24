@@ -9,9 +9,11 @@ export default defineConfig({
       }),
     ],
     ssr: {
-      external: ['arctic'],
+      // external: ['arctic'],
+      noExternal: ['arctic'],
     },
   },
+  server: {},
   react: {
     babel: {
       plugins: [['babel-plugin-react-compiler', { target: '19' }]],
