@@ -15,7 +15,7 @@ import { seo } from '~/lib/utils/seo';
 import { env } from '~/lib/utils/env';
 
 const TanStackRouterDevtools =
-  env.MODE !== 'development'
+  env.MODE === 'production' || env.MODE === 'deploy-preview'
     ? () => null // Render nothing in production
     : React.lazy(() =>
         // Lazy load in development
