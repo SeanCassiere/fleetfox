@@ -205,7 +205,7 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
           await tx.insert(tables.accounts).values({
             id: dbAccountId,
             name: parsedUser.name || parsedUser.login,
-            email: parsedUser.email,
+            email: parsedUser.email.toLowerCase(),
             emailVerified: parsedUser.emailVerified,
             avatarUrl: parsedUser.avatar_url,
           });
@@ -278,7 +278,7 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
 function getAccount(email: string) {
   return db.query.accounts.findFirst({
     where(fields, operators) {
-      return operators.eq(fields.email, email);
+      return operators.eq(fields.email, email.toLowerCase());
     },
   });
 }

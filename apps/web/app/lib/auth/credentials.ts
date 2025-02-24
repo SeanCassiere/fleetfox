@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { db } from '../db';
 
 export async function hashPassword(password: string) {
   return new Promise<string>((resolve, reject) => {
@@ -20,4 +21,27 @@ export async function verifyPassword(attempt: string, hash: string) {
       resolve(key == derivedKey.toString('hex'));
     });
   });
+}
+
+export async function verifyLogin(email: string, password: string) {
+  const account = await db.query.accounts.findFirst({
+    where(fields, operators) {
+      return operators.and(operators.eq(fields.email, email.toLowerCase()));
+    },
+  });
+  if (!account) {
+    // account creation with tenant
+    return null;
+  }
+
+  if (!account.password) {
+    return null;
+  }
+
+  const matchPasswords = await verifyPassword(password, account.password);
+  if (!matchPasswords) {
+    return null;
+  }
+
+  return { id: account.id, name: account.name, email: account.email };
 }

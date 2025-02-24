@@ -1,12 +1,18 @@
 import { useServerFn, createServerFn } from '@tanstack/start';
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
-import { setCookie } from '@tanstack/start/server';
+import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
 import { GalleryVerticalEnd } from 'lucide-react';
 import type { SVGProps } from 'react';
 import { Button } from '~/components/ui/button';
-import { githubOAuth, githubScopes } from '~/lib/auth';
+import {
+  createSessionId,
+  githubOAuth,
+  githubScopes,
+  setSession,
+  verifyLogin,
+} from '~/lib/auth';
 import { env } from '~/lib/utils/env';
 import { getModeServerFn } from '~/lib/server/env-server-functions';
 import { checkAuthServerFn } from '~/lib/auth/server';
@@ -34,6 +40,63 @@ const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
     };
   },
 );
+
+const credentialsEmailLoginServerFn = createServerFn({ method: 'POST' })
+  .validator((input: unknown) => {
+    if (!(input instanceof FormData)) {
+      throw new Error('Input must be a FormData instance');
+    }
+    const email = input.get('email');
+    const password = input.get('password');
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      throw new Error('Invalid input');
+    }
+
+    return { email, password };
+  })
+  .handler(async ({ data }) => {
+    const request = getWebRequest();
+
+    if (!request) {
+      throw new Error('No request');
+    }
+
+    const account = await verifyLogin(data.email, data.password);
+
+    if (!account) {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/login?auth_prompt=access_denied' },
+      });
+    }
+
+    const headers = new Headers(request.headers);
+    const redirectHref = getCookie('auth_redirect_href') || '/app/';
+
+    const sessionId = createSessionId();
+
+    setSession(
+      {
+        id: sessionId,
+        accountId: account.id,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+      },
+      headers.get('user-agent'),
+    );
+
+    setCookie('auth_session_id', sessionId, {
+      path: '/',
+      httpOnly: true,
+      secure: env.MODE !== 'development',
+      sameSite: 'lax',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+    });
+
+    return new Response(null, {
+      status: 302,
+      headers: { Location: redirectHref },
+    });
+  });
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
@@ -122,11 +185,17 @@ function RouteComponent() {
                           Or continue with
                         </span>
                       </div>
-                      <form className="grid gap-6">
+                      <form
+                        className="grid gap-6"
+                        method="POST"
+                        action={credentialsEmailLoginServerFn.url}
+                        encType="multipart/form-data"
+                      >
                         <div className="grid gap-2">
                           <Label htmlFor="email">Email</Label>
                           <Input
                             id="email"
+                            name="email"
                             type="email"
                             placeholder="m@example.com"
                             required
@@ -142,7 +211,12 @@ function RouteComponent() {
                               Forgot your password?
                             </a>
                           </div>
-                          <Input id="password" type="password" required />
+                          <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                          />
                         </div>
                         <Button type="submit" className="w-full">
                           Login
