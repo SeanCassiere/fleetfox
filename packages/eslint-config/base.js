@@ -35,6 +35,19 @@ export const baseConfig = [
     },
   },
   {
+    rules: {
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+  {
     plugins: {
       turbo: pluginTurbo,
     },
