@@ -12,9 +12,6 @@ import { env } from '~/lib/utils/env';
 
 export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
   async () => {
-    if (!globalThis.crypto) {
-      globalThis.crypto = new (await import('@peculiar/webcrypto')).Crypto();
-    }
     const state = arctic.generateState();
     const authorizationUrl = githubOAuth.createAuthorizationURL(
       state,
