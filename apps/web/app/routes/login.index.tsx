@@ -4,6 +4,7 @@ import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
 import { DynamicIcon } from 'lucide-react/dynamic';
+import { toast } from 'sonner';
 import type { SVGProps } from 'react';
 import { Button } from '~/components/ui/button';
 import {
@@ -172,7 +173,14 @@ function RouteComponent() {
                         variant="outline"
                         className="w-full"
                         onClick={() => {
-                          githubLoginFn();
+                          try {
+                            githubLoginFn();
+                          } catch (e) {
+                            const message = e instanceof Error && e.message;
+                            toast.error(
+                              message || 'Failed to login with GitHub',
+                            );
+                          }
                         }}
                       >
                         <Github />
