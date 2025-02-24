@@ -6,5 +6,6 @@
 
 /build/
 .vinxi
+.output
 
 temp/local.db
