@@ -114,21 +114,23 @@ export const Route = createFileRoute('/login/')({
   }),
 });
 
-const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(() => {
-  const state = arctic.generateState();
-  const authorizationUrl = githubOAuth.createAuthorizationURL(
-    state,
-    githubScopes,
-  );
-  setCookie('auth_github_oauth_state', state, {
-    path: '/',
-    secure: env.MODE !== 'development',
-    httpOnly: true,
-    maxAge: 60 * 10 /* 10 minutes */,
-  });
+const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    const state = arctic.generateState();
+    const authorizationUrl = githubOAuth.createAuthorizationURL(
+      state,
+      githubScopes,
+    );
+    setCookie('auth_github_oauth_state', state, {
+      path: '/',
+      secure: env.MODE !== 'development',
+      httpOnly: true,
+      maxAge: 60 * 10 /* 10 minutes */,
+    });
 
-  throw redirect({ href: authorizationUrl.href });
-});
+    throw redirect({ href: authorizationUrl.href });
+  },
+);
 
 function RouteComponent() {
   const authOptions = Route.useLoaderData({ select: (s) => s.options });
@@ -143,9 +145,7 @@ function RouteComponent() {
           className="flex items-center gap-2 self-center font-medium"
         >
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            {/* <GalleryVerticalEnd className="size-4" /> */}
             <DynamicIcon name="gallery-vertical-end" className="size-4" />
-            {/* <Github className="size-4" /> */}
           </div>
           Acme Inc.
         </Link>
