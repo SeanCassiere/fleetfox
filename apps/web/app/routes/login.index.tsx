@@ -1,4 +1,4 @@
-import { useServerFn, createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/start';
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
@@ -129,14 +129,13 @@ const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
       maxAge: 60 * 10 /* 10 minutes */,
     });
 
-    throw redirect({ href: authorizationUrl.href });
+    return { authUrl: authorizationUrl.href };
   },
 );
 
 function RouteComponent() {
   const authOptions = Route.useLoaderData({ select: (s) => s.options });
   const search = Route.useSearch();
-  const githubLoginFn = useServerFn(githubLoginServerFn);
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
@@ -174,7 +173,9 @@ function RouteComponent() {
                         className="w-full"
                         onClick={() => {
                           try {
-                            githubLoginFn();
+                            githubLoginServerFn().then((r) => {
+                              console.log(r.authUrl);
+                            });
                           } catch (e) {
                             const message = e instanceof Error && e.message;
                             toast.error(

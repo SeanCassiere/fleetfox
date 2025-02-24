@@ -1,6 +1,5 @@
 import { defineConfig } from '@tanstack/start/config';
 import tsConfigPaths from 'vite-tsconfig-paths';
-import { node } from 'unenv';
 
 export default defineConfig({
   vite: {
@@ -16,6 +15,6 @@ export default defineConfig({
     },
   },
   server: {
-    unenv: node,
+    // node: true,
   },
 });
