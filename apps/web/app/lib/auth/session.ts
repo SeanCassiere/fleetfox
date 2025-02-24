@@ -42,7 +42,7 @@ export async function getSessionAndAccount(
   }
 
   const {
-    account: { password, ...account },
+    account: { password: _password, ...account },
     ...session
   } = result;
   return { session, account };
