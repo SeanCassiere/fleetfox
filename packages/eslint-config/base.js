@@ -3,6 +3,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import tsEslint from 'typescript-eslint';
 import pluginTurbo from 'eslint-plugin-turbo';
 import pluginImport from 'eslint-plugin-import-x';
+import pluginUnusedImports from 'eslint-plugin-unused-imports';
 
 /**
  * A shared ESLint configuration for the repository.
@@ -30,12 +31,17 @@ export const baseConfig = [
   ...tsEslint.configs.recommended,
   {
     rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
+    plugins: {
+      'unused-imports': pluginUnusedImports,
+    },
     rules: {
+      'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',
         {
