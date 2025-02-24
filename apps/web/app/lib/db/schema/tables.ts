@@ -90,6 +90,7 @@ export const oauthConnections = sqliteTable(
 
 export const sessions = sqliteTable('session', {
   id: text().primaryKey(),
+  name: text().notNull(),
   accountId: text('account_id')
     .notNull()
     .references(() => accounts.id, {

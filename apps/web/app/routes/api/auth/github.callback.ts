@@ -5,7 +5,7 @@ import * as arctic from 'arctic';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { githubOAuth } from '~/lib/auth';
-import { createSessionId, setSession } from '~/lib/auth/db';
+import { createSessionId, deleteSession, setSession } from '~/lib/auth/session';
 import { createId, db, tables } from '~/lib/db';
 import { env } from '~/lib/utils/env';
 
@@ -27,6 +27,7 @@ const githubEmailsSchema = z.array(
 export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
   GET: async ({ request }) => {
     const url = new URL(request.url);
+    const headers = new Headers(request.headers);
 
     const error = url.searchParams.get('error');
 
@@ -236,11 +237,19 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
     try {
       const sessionId = createSessionId();
 
-      setSession({
-        id: sessionId,
-        accountId: accountId,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
-      });
+      const currentSession = getCookie('auth_session_id');
+      if (currentSession) {
+        await deleteSession(currentSession);
+      }
+
+      setSession(
+        {
+          id: sessionId,
+          accountId: accountId,
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+        },
+        headers.get('user-agent'),
+      );
 
       setCookie('auth_session_id', sessionId, {
         path: '/',

@@ -1,6 +1,7 @@
 import { encodeBase32 } from '@oslojs/encoding';
 import { eq, lt } from 'drizzle-orm';
-import { getDbEnvKey, joinDbId, dbPrefixes } from '../db/create-db-id';
+import { UAParser } from 'ua-parser-js';
+import { getDbEnvKey, joinDbId, dbPrefixes } from '~/lib/db/create-db-id';
 import { db, tables } from '~/lib/db';
 
 function generateIdFromEntropySize(size: number): string {
@@ -53,9 +54,21 @@ export async function getAccountSessions(
 
 export async function setSession(
   session: Pick<DatabaseSession, 'id' | 'accountId' | 'expiresAt'>,
+  userAgent: string | null | undefined,
 ): Promise<void> {
+  const ua = new UAParser(userAgent === null ? undefined : userAgent);
+
+  const os = ua.getOS();
+  const device = ua.getDevice();
+  const browser = ua.getBrowser();
+
+  const deviceName = userAgent
+    ? `${device.vendor} ${device.model} - ${os.name} (${os.version}) ${browser.name} (${browser.version})`
+    : `Unknown device - ${session.id}`;
+
   await db.insert(tables.sessions).values({
     id: session.id,
+    name: deviceName,
     accountId: session.accountId,
     expiresAt: session.expiresAt,
   });
