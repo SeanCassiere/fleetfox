@@ -1,6 +1,6 @@
 import { redirect } from '@tanstack/react-router';
 import { createMiddleware, createServerFn } from '@tanstack/start';
-import { getCookie, setCookie } from '@tanstack/start/server';
+import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import { deleteSession, getSessionAndAccount } from '~/lib/auth';
 
 export const userServerMiddleware = createMiddleware().server(
@@ -29,6 +29,31 @@ export const checkAuthServerFn = createServerFn()
   .middleware([userServerMiddleware])
   .handler(async ({ context }) => {
     const { session, account } = context;
+
+    if (!session) {
+      const request = getWebRequest();
+      const existingOrigin = getCookie('auth_redirect_href');
+
+      let origin =
+        existingOrigin && !existingOrigin.includes('/login')
+          ? existingOrigin
+          : '/app/';
+
+      if (request) {
+        const extractedOrigin =
+          request.headers.get('origin') || request.headers.get('referer');
+        origin =
+          extractedOrigin && !extractedOrigin.includes('/login')
+            ? extractedOrigin
+            : origin;
+      }
+
+      setCookie('auth_redirect_href', origin, {
+        expires: new Date(Date.now() + 10 * 60 * 1000), // 10 mins
+      });
+    } else {
+      setCookie('auth_redirect_href', '', { maxAge: 0, expires: new Date(0) });
+    }
 
     return {
       status: session ? 'proceed' : 'login',

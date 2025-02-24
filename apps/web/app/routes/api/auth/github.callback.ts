@@ -1,4 +1,3 @@
-import { json } from '@tanstack/start';
 import { createAPIFileRoute } from '@tanstack/start/api';
 import { getCookie, setCookie, deleteCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
@@ -242,6 +241,8 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
         await deleteSession(currentSession);
       }
 
+      const redirectHref = getCookie('auth_redirect_href') || '/app/';
+
       setSession(
         {
           id: sessionId,
@@ -260,10 +261,9 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
       });
       deleteCookie('auth_github_oauth_state');
 
-      return json({
-        sessionId,
-        profile: githubProfile,
-        emails: githubEmail,
+      return new Response(null, {
+        status: 302,
+        headers: { Location: redirectHref },
       });
     } catch (error) {
       console.error(error);
