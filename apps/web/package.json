@@ -12,7 +12,9 @@
     "check-types": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env.local --",
     "drizzle:studio": "pnpm with-env drizzle-kit studio",
-    "drizzle:push": "pnpm with-env drizzle-kit push"
+    "drizzle:push": "pnpm with-env drizzle-kit push",
+    "drizzle:generate": "pnpm with-env drizzle-kit generate",
+    "drizzle:migrate": "pnpm with-env drizzle-kit migrate"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
