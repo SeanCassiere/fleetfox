@@ -15,6 +15,6 @@ export default defineConfig({
     },
   },
   server: {
-    // node: true,
+    node: true,
   },
 });
