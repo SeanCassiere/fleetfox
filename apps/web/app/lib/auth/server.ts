@@ -24,7 +24,10 @@ export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
       maxAge: 60 * 10 /* 10 minutes */,
     });
 
-    return { authUrl: authorizationUrl.href };
+    return new Response(null, {
+      status: 302,
+      headers: { Location: authorizationUrl.href },
+    });
   },
 );
 

@@ -2,7 +2,6 @@ import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import { DynamicIcon } from 'lucide-react/dynamic';
-import { toast } from 'sonner';
 import { z } from 'zod';
 import type { SVGProps } from 'react';
 import { Alert, AlertDescription } from '~/components/ui/alert';
@@ -143,27 +142,12 @@ function RouteComponent() {
                 <div className="grid gap-6">
                   <div className="flex flex-col gap-4">
                     {authOptions.includes('github') ? (
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={() => {
-                          try {
-                            githubLoginServerFn().then((r) => {
-                              const anchor = document.createElement('a');
-                              anchor.href = r.authUrl;
-                              anchor.click();
-                            });
-                          } catch (e) {
-                            const message = e instanceof Error && e.message;
-                            toast.error(
-                              message || 'Failed to login with GitHub',
-                            );
-                          }
-                        }}
-                      >
-                        <Github />
-                        Login with GItHub
-                      </Button>
+                      <form method="POST" action={githubLoginServerFn.url}>
+                        <Button variant="outline" className="w-full">
+                          <Github />
+                          Login with GItHub
+                        </Button>
+                      </form>
                     ) : null}
                   </div>
                   {authOptions.includes('credentials:email') ? (
