@@ -6,8 +6,12 @@ import {
 import { getRouterManifest } from '@tanstack/start/router-manifest';
 
 import { createRouter } from './router';
+import { serverPolyfill } from './lib/utils/polyfill';
 
 export default createStartHandler({
   createRouter,
   getRouterManifest,
-})(defaultStreamHandler);
+})(async (args) => {
+  await serverPolyfill();
+  return defaultStreamHandler(args);
+});

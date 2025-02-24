@@ -1,22 +1,12 @@
-import { useServerFn, createServerFn } from '@tanstack/start';
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/start';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
-import * as arctic from 'arctic';
-import { z } from 'zod';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import type { SVGProps } from 'react';
+import { Alert, AlertDescription } from '~/components/ui/alert';
 import { Button } from '~/components/ui/button';
-import {
-  createSessionId,
-  githubOAuth,
-  githubScopes,
-  setSession,
-  verifyLogin,
-} from '~/lib/auth';
-import { env } from '~/lib/utils/env';
-import { getModeServerFn } from '~/lib/server/env-server-functions';
-import { checkAuthServerFn } from '~/lib/auth/server';
 import {
   Card,
   CardContent,
@@ -24,10 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card';
-import { cn } from '~/lib/utils';
-import { Label } from '~/components/ui/label';
 import { Input } from '~/components/ui/input';
-import { Alert, AlertDescription } from '~/components/ui/alert';
+import { Label } from '~/components/ui/label';
+import { createSessionId, setSession, verifyLogin } from '~/lib/auth';
+import { checkAuthServerFn, githubLoginServerFn } from '~/lib/auth/server';
+import { getModeServerFn } from '~/lib/server/env-server-functions';
+import { cn } from '~/lib/utils';
+import { env } from '~/lib/utils/env';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -115,34 +108,9 @@ export const Route = createFileRoute('/login/')({
   }),
 });
 
-const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
-  async () => {
-    const crypto = await import('node:crypto');
-    Object.defineProperty(global.self, 'crypto', {
-      value: {
-        subtle: crypto.webcrypto.subtle,
-      },
-    });
-    const state = arctic.generateState();
-    const authorizationUrl = githubOAuth.createAuthorizationURL(
-      state,
-      githubScopes,
-    );
-    setCookie('auth_github_oauth_state', state, {
-      path: '/',
-      secure: env.MODE !== 'development',
-      httpOnly: true,
-      maxAge: 60 * 10 /* 10 minutes */,
-    });
-
-    throw redirect({ href: authorizationUrl.href });
-  },
-);
-
 function RouteComponent() {
   const authOptions = Route.useLoaderData({ select: (s) => s.options });
   const search = Route.useSearch();
-  const githubLoginFn = useServerFn(githubLoginServerFn);
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
@@ -180,7 +148,11 @@ function RouteComponent() {
                         className="w-full"
                         onClick={() => {
                           try {
-                            githubLoginFn();
+                            githubLoginServerFn().then((r) => {
+                              const anchor = document.createElement('a');
+                              anchor.href = r.authUrl;
+                              anchor.click();
+                            });
                           } catch (e) {
                             const message = e instanceof Error && e.message;
                             toast.error(
