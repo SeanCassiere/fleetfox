@@ -21,5 +21,13 @@
       "persistent": true
     }
   },
-  "globalEnv": ["NODE_ENV", "WEB_TURSO_DATABASE_URL", "WEB_TURSO_AUTH_TOKEN"]
+  "globalEnv": [
+    "NODE_ENV",
+    "WEB_TURSO_DATABASE_URL",
+    "WEB_TURSO_AUTH_TOKEN",
+    "WEB_GITHUB_CLIENT_ID",
+    "WEB_GITHUB_CLIENT_SECRET",
+    "WEB_SHOW_AUTH_EMAIL_CREDENTIALS",
+    "VITE_WEB_DEPLOY_URL"
+  ]
 }
