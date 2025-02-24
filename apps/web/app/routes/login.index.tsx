@@ -3,7 +3,7 @@ import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
 import * as arctic from 'arctic';
 import { z } from 'zod';
-// import { GalleryVerticalEnd } from 'lucide-react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import type { SVGProps } from 'react';
 import { Button } from '~/components/ui/button';
 import {
@@ -144,7 +144,8 @@ function RouteComponent() {
         >
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             {/* <GalleryVerticalEnd className="size-4" /> */}
-            <Github className="size-4" />
+            <DynamicIcon name="gallery-vertical-end" className="size-4" />
+            {/* <Github className="size-4" /> */}
           </div>
           Acme Inc.
         </Link>
