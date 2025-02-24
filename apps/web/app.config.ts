@@ -8,13 +8,13 @@ export default defineConfig({
         projects: ['./tsconfig.json'],
       }),
     ],
+    ssr: {
+      external: ['arctic'],
+    },
   },
   react: {
     babel: {
       plugins: [['babel-plugin-react-compiler', { target: '19' }]],
     },
-  },
-  server: {
-    node: true,
   },
 });
