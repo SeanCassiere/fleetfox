@@ -26,16 +26,6 @@ function RouteComponent() {
               Home
             </Link>
           </li>
-          <li>
-            <Link
-              to="/posts"
-              activeProps={{
-                className: 'font-bold',
-              }}
-            >
-              Posts
-            </Link>
-          </li>
         </ul>
         <ul className="p-2 flex gap-2 text-lg">
           <li>

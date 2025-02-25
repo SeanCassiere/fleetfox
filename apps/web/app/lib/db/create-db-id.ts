@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { env } from '~/lib/utils/env';
+import { env } from '~/lib/env';
 
 export const dbPrefixes = {
   account: 'acc',

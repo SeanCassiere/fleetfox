@@ -1,5 +1,5 @@
 import * as arctic from 'arctic';
-import { env } from '~/lib/utils/env';
+import { env } from '~/lib/env';
 
 export const githubOAuth = new arctic.GitHub(
   env.WEB_GITHUB_CLIENT_ID,

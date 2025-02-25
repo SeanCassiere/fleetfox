@@ -1,14 +1,8 @@
 import * as arctic from 'arctic';
-import { redirect } from '@tanstack/react-router';
 import { createMiddleware, createServerFn } from '@tanstack/start';
 import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
-import {
-  deleteSession,
-  getSessionAndAccount,
-  githubOAuth,
-  githubScopes,
-} from '~/lib/auth';
-import { env } from '~/lib/utils/env';
+import { getSessionAndAccount, githubOAuth, githubScopes } from '~/lib/auth';
+import { env } from '~/lib/env';
 
 export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
   async () => {
@@ -87,17 +81,4 @@ export const checkAuthServerFn = createServerFn()
       status: session ? 'proceed' : 'login',
       account,
     };
-  });
-
-export const logoutServerFn = createServerFn()
-  .middleware([userServerMiddleware])
-  .handler(async ({ context }) => {
-    if (!context.session) {
-      throw redirect({ to: '/' });
-    }
-
-    deleteSession(context.session.id);
-    setCookie('auth_session_id', '', { maxAge: 0, expires: new Date(0) });
-
-    throw redirect({ to: '/' });
   });

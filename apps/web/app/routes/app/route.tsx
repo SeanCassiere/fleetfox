@@ -1,12 +1,6 @@
-import {
-  createFileRoute,
-  Outlet,
-  redirect,
-  useRouter,
-} from '@tanstack/react-router';
-import { useServerFn } from '@tanstack/start';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
-import { checkAuthServerFn, logoutServerFn } from '~/lib/auth/server';
+import { checkAuthServerFn } from '~/lib/auth/server';
 
 export const Route = createFileRoute('/app')({
   loader: async () => {
@@ -21,24 +15,15 @@ export const Route = createFileRoute('/app')({
 });
 
 function RouteComponent() {
-  const router = useRouter();
-  const logoutFn = useServerFn(logoutServerFn);
   return (
-    <div>
-      <p>Hello "/app"!</p>
-      <Button
-        onClick={() => {
-          logoutFn().then(() => {
-            return router.invalidate({
-              filter: (match) => match.pathname.startsWith('/app'),
-            });
-          });
-        }}
-      >
-        Logout
-      </Button>
+    <main className="py-6">
+      <div className="px-6 pb-6">
+        <form action="/api/auth/logout" method="GET">
+          <Button>Logout</Button>
+        </form>
+      </div>
       <hr />
       <Outlet />
-    </div>
+    </main>
   );
 }

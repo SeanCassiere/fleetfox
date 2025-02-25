@@ -18,8 +18,8 @@ import { Label } from '~/components/ui/label';
 import { createSessionId, setSession, verifyLogin } from '~/lib/auth';
 import { checkAuthServerFn, githubLoginServerFn } from '~/lib/auth/server';
 import { getModeServerFn } from '~/lib/server/env-server-functions';
-import { cn } from '~/lib/utils';
-import { env } from '~/lib/utils/env';
+import { cn, seo } from '~/lib/utils';
+import { env } from '~/lib/env';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -105,6 +105,9 @@ export const Route = createFileRoute('/login/')({
   validateSearch: z.object({
     auth_prompt: z.string().optional(),
   }),
+  head: () => ({
+    meta: seo({ title: 'Login | Fleetfox' }),
+  }),
 });
 
 function RouteComponent() {
@@ -144,7 +147,7 @@ function RouteComponent() {
                     {authOptions.includes('github') ? (
                       <form method="POST" action={githubLoginServerFn.url}>
                         <Button variant="outline" className="w-full">
-                          <Github />
+                          <Github className="size-4 fill-primary" />
                           Login with GItHub
                         </Button>
                       </form>

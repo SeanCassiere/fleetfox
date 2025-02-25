@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { githubOAuth } from '~/lib/auth';
 import { createSessionId, deleteSession, setSession } from '~/lib/auth/session';
 import { createId, db, tables } from '~/lib/db';
-import { env } from '~/lib/utils/env';
+import { env } from '~/lib/env';
 
 const githubProfileSchema = z.object({
   id: z.coerce.string(),

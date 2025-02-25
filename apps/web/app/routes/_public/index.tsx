@@ -3,9 +3,13 @@ import { toast } from 'sonner';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
+import { seo } from '~/lib/utils';
 
 export const Route = createFileRoute('/_public/')({
   component: Home,
+  head: () => ({
+    meta: seo({ title: 'Home | Fleetfox' }),
+  }),
 });
 
 function Home() {

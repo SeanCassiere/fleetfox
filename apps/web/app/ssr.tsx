@@ -6,7 +6,7 @@ import {
 import { getRouterManifest } from '@tanstack/start/router-manifest';
 
 import { createRouter } from './router';
-import { serverPolyfill } from './lib/utils/polyfill';
+import { serverPolyfill } from './lib/server/polyfill';
 
 export default createStartHandler({
   createRouter,

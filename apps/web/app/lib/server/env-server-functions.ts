@@ -1,7 +1,7 @@
 // Server functions to surgically fetch server environment variables.
 
 import { createServerFn } from '@tanstack/start';
-import { env } from '~/lib/utils/env';
+import { env } from '~/lib/env';
 
 /**
  * Fetch the `MODE` environment variable.

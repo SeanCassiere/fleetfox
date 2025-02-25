@@ -11,8 +11,8 @@ import type { QueryClient } from '@tanstack/react-query';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
 import appCss from '~/styles/app.css?url';
-import { seo } from '~/lib/utils/seo';
-import { env } from '~/lib/utils/env';
+import { seo } from '~/lib/utils';
+import { env } from '~/lib/env';
 
 const TanStackRouterDevtools =
   env.VITE_WEB_MODE === 'production' || env.VITE_WEB_MODE === 'deploy-preview'
