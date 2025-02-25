@@ -7,5 +7,5 @@ import { env } from '~/lib/utils/env';
  * Fetch the `MODE` environment variable.
  */
 export const getModeServerFn = createServerFn({ method: 'GET' }).handler(() => {
-  return env.MODE;
+  return env.VITE_WEB_MODE;
 });

@@ -2,10 +2,6 @@ import { z } from 'zod';
 
 // Define server-only schema
 const serverEnvSchema = z.object({
-  MODE: z
-    .enum(['development', 'production', 'deploy-preview'])
-    .optional()
-    .default('development'),
   NODE_ENV: z.string().optional().default('development'),
   WEB_TURSO_DATABASE_URL: z.string(),
   WEB_TURSO_AUTH_TOKEN: z.string().optional().default('CHANGE_ME'),
@@ -17,6 +13,10 @@ const serverEnvSchema = z.object({
 // Define client schema
 const viteEnvSchema = z.object({
   SSR: z.boolean().optional().default(false),
+  VITE_WEB_MODE: z
+    .enum(['development', 'production', 'deploy-preview'])
+    .optional()
+    .default('development'),
   VITE_WEB_DEPLOY_URL: z.string(),
 });
 

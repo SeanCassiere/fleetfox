@@ -34,9 +34,9 @@ export function joinDbId(...ids: string[]) {
 
 export function getDbEnvKey() {
   return dbEnv[
-    env.MODE === 'production'
+    env.VITE_WEB_MODE === 'production'
       ? 'live'
-      : env.MODE === 'deploy-preview'
+      : env.VITE_WEB_MODE === 'deploy-preview'
         ? 'deploy'
         : 'dev'
   ];

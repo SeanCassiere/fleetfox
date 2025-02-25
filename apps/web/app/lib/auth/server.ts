@@ -19,7 +19,7 @@ export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
     );
     setCookie('auth_github_oauth_state', state, {
       path: '/',
-      secure: env.MODE !== 'development',
+      secure: env.VITE_WEB_MODE !== 'development',
       httpOnly: true,
       maxAge: 60 * 10 /* 10 minutes */,
     });
