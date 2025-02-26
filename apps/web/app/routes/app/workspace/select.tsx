@@ -37,6 +37,7 @@ const setCurrentWorkspaceServerFn = createServerFn({ method: 'POST' })
       httpOnly: true,
       secure: env.VITE_WEB_MODE !== 'development',
       sameSite: 'lax',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90), // 90 days
     });
 
     throw redirect({

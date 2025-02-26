@@ -16,9 +16,14 @@ export function getRedirectUrlForWorkspace(
   }
 
   if (!attemptedWorkspace) {
-    // No attempted workspace is set, so redirect to workspace selection flow.
-    currentWorkspace = undefined;
-    href = '/app/workspace/select';
+    // Account only has access to one workspace, so redirect to that workspace.
+    if (workspaces.length === 1) {
+      currentWorkspace = workspaces[0].workspace;
+      href = `/app/${currentWorkspace}`;
+    } else {
+      currentWorkspace = undefined;
+      href = '/app/workspace/select';
+    }
   } else {
     const found = workspaces.find((w) => w.workspace === attemptedWorkspace);
 
