@@ -1,22 +1,27 @@
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
-import { seo } from '~/lib/utils';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import {
+  getAvailableWorkspacesServerFn,
+  getSavedWorkspaceServerFn,
+} from '~/lib/auth/server';
 
 export const Route = createFileRoute('/app/')({
-  component: RouteComponent,
-  head: () => ({
-    meta: seo({ title: 'Dashboard | Fleetfox' }),
-  }),
-});
+  loader: async () => {
+    const workspaces = await getAvailableWorkspacesServerFn();
+    if (workspaces.length === 0) {
+      throw redirect({ to: '/app/workspace/create' });
+    }
 
-function RouteComponent() {
-  const appLoaderData = useLoaderData({ from: '/app' });
-  return (
-    <div className="p-6">
-      <div>
-        <code>
-          <pre>{JSON.stringify(appLoaderData, null, 2)}</pre>
-        </code>
-      </div>
-    </div>
-  );
-}
+    const savedWorkspace = await getSavedWorkspaceServerFn();
+    if (savedWorkspace) {
+      const found = workspaces.find((w) => w.workspace === savedWorkspace);
+      if (found) {
+        throw redirect({
+          to: '/app/$workspace',
+          params: { workspace: savedWorkspace },
+        });
+      }
+    }
+
+    throw redirect({ to: '/app/workspace/select' });
+  },
+});
