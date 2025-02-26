@@ -1,5 +1,5 @@
-import { createAPIFileRoute } from '@tanstack/start/api';
-import { getCookie, setCookie } from '@tanstack/start/server';
+import { createAPIFileRoute } from '@tanstack/react-start/api';
+import { getCookie, setCookie } from '@tanstack/react-start/server';
 import { deleteSession, getSessionAndAccount } from '~/lib/auth';
 
 export const APIRoute = createAPIFileRoute('/api/auth/logout')({

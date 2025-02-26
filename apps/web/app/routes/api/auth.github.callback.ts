@@ -1,5 +1,9 @@
-import { createAPIFileRoute } from '@tanstack/start/api';
-import { getCookie, setCookie, deleteCookie } from '@tanstack/start/server';
+import { createAPIFileRoute } from '@tanstack/react-start/api';
+import {
+  getCookie,
+  setCookie,
+  deleteCookie,
+} from '@tanstack/react-start/server';
 import * as arctic from 'arctic';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
