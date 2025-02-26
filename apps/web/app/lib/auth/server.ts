@@ -1,6 +1,10 @@
 import * as arctic from 'arctic';
-import { createMiddleware, createServerFn } from '@tanstack/start';
-import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
+import { createMiddleware, createServerFn } from '@tanstack/react-start';
+import {
+  getCookie,
+  getWebRequest,
+  setCookie,
+} from '@tanstack/react-start/server';
 import { getSessionAndAccount, githubOAuth, githubScopes } from '~/lib/auth';
 import { env } from '~/lib/env';
 

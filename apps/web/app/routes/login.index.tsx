@@ -1,6 +1,10 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
-import { getCookie, getWebRequest, setCookie } from '@tanstack/start/server';
+import { createServerFn } from '@tanstack/react-start';
+import {
+  getCookie,
+  getWebRequest,
+  setCookie,
+} from '@tanstack/react-start/server';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { z } from 'zod';
 import type { SVGProps } from 'react';

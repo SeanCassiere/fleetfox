@@ -1,6 +1,6 @@
 // Server functions to surgically fetch server environment variables.
 
-import { createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/react-start';
 import { env } from '~/lib/env';
 
 /**
