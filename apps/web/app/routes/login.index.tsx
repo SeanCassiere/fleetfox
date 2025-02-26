@@ -19,11 +19,18 @@ import {
 } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
-import { createSessionId, setSession, verifyLogin } from '~/lib/auth';
+import {
+  APP_COOKIES,
+  createSessionId,
+  setSession,
+  verifyLogin,
+} from '~/lib/auth';
 import { checkAuthServerFn, githubLoginServerFn } from '~/lib/auth/server';
 import { getModeServerFn } from '~/server/env-server-functions';
 import { cn, seo } from '~/lib/utils';
 import { env } from '~/lib/env';
+import { getWorkspacesForAccount } from '~/lib/db/workspace';
+import { getRedirectUrlForWorkspace } from '~/lib/auth/workspace';
 
 const getAuthOptionsServerFn = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -68,7 +75,13 @@ const credentialsEmailLoginServerFn = createServerFn({ method: 'POST' })
     }
 
     const headers = new Headers(request.headers);
-    const redirectHref = getCookie('auth_redirect_href') || '/app/';
+
+    const workspaces = await getWorkspacesForAccount(account.id);
+    const { redirectPath, workspace: currentWorkspace } =
+      getRedirectUrlForWorkspace(
+        workspaces,
+        getCookie(APP_COOKIES.app_currentWorkspace),
+      );
 
     const sessionId = createSessionId();
 
@@ -81,7 +94,7 @@ const credentialsEmailLoginServerFn = createServerFn({ method: 'POST' })
       headers.get('user-agent'),
     );
 
-    setCookie('auth_session_id', sessionId, {
+    setCookie(APP_COOKIES.auth_sessionId, sessionId, {
       path: '/',
       httpOnly: true,
       secure: env.VITE_WEB_MODE !== 'development',
@@ -89,9 +102,18 @@ const credentialsEmailLoginServerFn = createServerFn({ method: 'POST' })
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
     });
 
+    if (typeof currentWorkspace === 'string' && currentWorkspace.length) {
+      setCookie(APP_COOKIES.app_currentWorkspace, currentWorkspace, {
+        path: '/',
+        httpOnly: true,
+        secure: env.VITE_WEB_MODE !== 'development',
+        sameSite: 'lax',
+      });
+    }
+
     return new Response(null, {
       status: 302,
-      headers: { Location: redirectHref },
+      headers: { Location: redirectPath },
     });
   });
 

@@ -16,9 +16,10 @@ import { Route as AppRouteImport } from './routes/app/route'
 import { Route as LoginIndexImport } from './routes/login.index'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as PublicIndexImport } from './routes/_public/index'
-import { Route as AppCreateWorkspaceImport } from './routes/app/create-workspace'
 import { Route as AppWorkspaceRouteImport } from './routes/app/$workspace/route'
 import { Route as AppWorkspaceIndexImport } from './routes/app/$workspace/index'
+import { Route as AppWorkspaceSelectImport } from './routes/app/workspace/select'
+import { Route as AppWorkspaceCreateImport } from './routes/app/workspace/create'
 
 // Create/Update Routes
 
@@ -51,12 +52,6 @@ const PublicIndexRoute = PublicIndexImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 
-const AppCreateWorkspaceRoute = AppCreateWorkspaceImport.update({
-  id: '/create-workspace',
-  path: '/create-workspace',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-
 const AppWorkspaceRouteRoute = AppWorkspaceRouteImport.update({
   id: '/$workspace',
   path: '/$workspace',
@@ -67,6 +62,18 @@ const AppWorkspaceIndexRoute = AppWorkspaceIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppWorkspaceRouteRoute,
+} as any)
+
+const AppWorkspaceSelectRoute = AppWorkspaceSelectImport.update({
+  id: '/workspace/select',
+  path: '/workspace/select',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppWorkspaceCreateRoute = AppWorkspaceCreateImport.update({
+  id: '/workspace/create',
+  path: '/workspace/create',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -94,13 +101,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWorkspaceRouteImport
       parentRoute: typeof AppRouteImport
     }
-    '/app/create-workspace': {
-      id: '/app/create-workspace'
-      path: '/create-workspace'
-      fullPath: '/app/create-workspace'
-      preLoaderRoute: typeof AppCreateWorkspaceImport
-      parentRoute: typeof AppRouteImport
-    }
     '/_public/': {
       id: '/_public/'
       path: '/'
@@ -121,6 +121,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
+    }
+    '/app/workspace/create': {
+      id: '/app/workspace/create'
+      path: '/workspace/create'
+      fullPath: '/app/workspace/create'
+      preLoaderRoute: typeof AppWorkspaceCreateImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/app/workspace/select': {
+      id: '/app/workspace/select'
+      path: '/workspace/select'
+      fullPath: '/app/workspace/select'
+      preLoaderRoute: typeof AppWorkspaceSelectImport
+      parentRoute: typeof AppRouteImport
     }
     '/app/$workspace/': {
       id: '/app/$workspace/'
@@ -147,14 +161,16 @@ const AppWorkspaceRouteRouteWithChildren =
 
 interface AppRouteRouteChildren {
   AppWorkspaceRouteRoute: typeof AppWorkspaceRouteRouteWithChildren
-  AppCreateWorkspaceRoute: typeof AppCreateWorkspaceRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppWorkspaceCreateRoute: typeof AppWorkspaceCreateRoute
+  AppWorkspaceSelectRoute: typeof AppWorkspaceSelectRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppWorkspaceRouteRoute: AppWorkspaceRouteRouteWithChildren,
-  AppCreateWorkspaceRoute: AppCreateWorkspaceRoute,
   AppIndexRoute: AppIndexRoute,
+  AppWorkspaceCreateRoute: AppWorkspaceCreateRoute,
+  AppWorkspaceSelectRoute: AppWorkspaceSelectRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -176,18 +192,20 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
   '': typeof PublicRouteWithChildren
   '/app/$workspace': typeof AppWorkspaceRouteRouteWithChildren
-  '/app/create-workspace': typeof AppCreateWorkspaceRoute
   '/': typeof PublicIndexRoute
   '/app/': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
+  '/app/workspace/create': typeof AppWorkspaceCreateRoute
+  '/app/workspace/select': typeof AppWorkspaceSelectRoute
   '/app/$workspace/': typeof AppWorkspaceIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/app/create-workspace': typeof AppCreateWorkspaceRoute
   '/': typeof PublicIndexRoute
   '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
+  '/app/workspace/create': typeof AppWorkspaceCreateRoute
+  '/app/workspace/select': typeof AppWorkspaceSelectRoute
   '/app/$workspace': typeof AppWorkspaceIndexRoute
 }
 
@@ -196,10 +214,11 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/app/$workspace': typeof AppWorkspaceRouteRouteWithChildren
-  '/app/create-workspace': typeof AppCreateWorkspaceRoute
   '/_public/': typeof PublicIndexRoute
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/app/workspace/create': typeof AppWorkspaceCreateRoute
+  '/app/workspace/select': typeof AppWorkspaceSelectRoute
   '/app/$workspace/': typeof AppWorkspaceIndexRoute
 }
 
@@ -209,22 +228,30 @@ export interface FileRouteTypes {
     | '/app'
     | ''
     | '/app/$workspace'
-    | '/app/create-workspace'
     | '/'
     | '/app/'
     | '/login'
+    | '/app/workspace/create'
+    | '/app/workspace/select'
     | '/app/$workspace/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/app/create-workspace' | '/' | '/app' | '/login' | '/app/$workspace'
+  to:
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/workspace/create'
+    | '/app/workspace/select'
+    | '/app/$workspace'
   id:
     | '__root__'
     | '/app'
     | '/_public'
     | '/app/$workspace'
-    | '/app/create-workspace'
     | '/_public/'
     | '/app/'
     | '/login/'
+    | '/app/workspace/create'
+    | '/app/workspace/select'
     | '/app/$workspace/'
   fileRoutesById: FileRoutesById
 }
@@ -260,8 +287,9 @@ export const routeTree = rootRoute
       "filePath": "app/route.tsx",
       "children": [
         "/app/$workspace",
-        "/app/create-workspace",
-        "/app/"
+        "/app/",
+        "/app/workspace/create",
+        "/app/workspace/select"
       ]
     },
     "/_public": {
@@ -277,10 +305,6 @@ export const routeTree = rootRoute
         "/app/$workspace/"
       ]
     },
-    "/app/create-workspace": {
-      "filePath": "app/create-workspace.tsx",
-      "parent": "/app"
-    },
     "/_public/": {
       "filePath": "_public/index.tsx",
       "parent": "/_public"
@@ -291,6 +315,14 @@ export const routeTree = rootRoute
     },
     "/login/": {
       "filePath": "login.index.tsx"
+    },
+    "/app/workspace/create": {
+      "filePath": "app/workspace/create.tsx",
+      "parent": "/app"
+    },
+    "/app/workspace/select": {
+      "filePath": "app/workspace/select.tsx",
+      "parent": "/app"
     },
     "/app/$workspace/": {
       "filePath": "app/$workspace/index.tsx",

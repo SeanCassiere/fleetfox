@@ -7,9 +7,11 @@ import {
 import * as arctic from 'arctic';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { githubOAuth } from '~/lib/auth';
+import { APP_COOKIES, githubOAuth } from '~/lib/auth';
 import { createSessionId, deleteSession, setSession } from '~/lib/auth/session';
+import { getRedirectUrlForWorkspace } from '~/lib/auth/workspace';
 import { createId, db, tables } from '~/lib/db';
+import { getWorkspacesForAccount } from '~/lib/db/workspace';
 import { env } from '~/lib/env';
 
 const githubProfileSchema = z.object({
@@ -43,7 +45,7 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
 
     const code = url.searchParams.get('code');
     const state = url.searchParams.get('state');
-    const cookieState = getCookie('auth_github_oauth_state');
+    const cookieState = getCookie(APP_COOKIES.auth_githubOauthState);
 
     if (!code || !state || !cookieState || state !== cookieState) {
       return new Response(null, { status: 400 });
@@ -127,6 +129,8 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
       emailVerified: githubEmail.verified,
     };
 
+    let redirectHref: string;
+    let accessibleWorkspace: string | undefined;
     let accountId: string;
 
     try {
@@ -192,6 +196,15 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
             });
           }
         }
+
+        const workspaces = await getWorkspacesForAccount(existingAccount.id);
+        const { redirectPath, workspace } = getRedirectUrlForWorkspace(
+          workspaces,
+          getCookie(APP_COOKIES.app_currentWorkspace),
+        );
+
+        redirectHref = redirectPath;
+        accessibleWorkspace = workspace;
       } else {
         // If account does not exist, write to the database
         const dbAccountId = createId('account');
@@ -228,6 +241,19 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
             avatarUrl: parsedUser.avatar_url,
           });
         });
+
+        const { redirectPath } = getRedirectUrlForWorkspace(
+          [
+            // user only has a single workspace at this point, so just manually add it into the array
+            {
+              id: dbTenantId,
+              workspace: dbTenantId,
+            },
+          ],
+          dbTenantId,
+        );
+        redirectHref = redirectPath;
+        accessibleWorkspace = dbTenantId;
       }
     } catch (error) {
       console.error(error);
@@ -240,12 +266,10 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
     try {
       const sessionId = createSessionId();
 
-      const currentSession = getCookie('auth_session_id');
+      const currentSession = getCookie(APP_COOKIES.auth_sessionId);
       if (currentSession) {
         await deleteSession(currentSession);
       }
-
-      const redirectHref = getCookie('auth_redirect_href') || '/app/';
 
       setSession(
         {
@@ -256,14 +280,26 @@ export const APIRoute = createAPIFileRoute('/api/auth/github/callback')({
         headers.get('user-agent'),
       );
 
-      setCookie('auth_session_id', sessionId, {
+      setCookie(APP_COOKIES.auth_sessionId, sessionId, {
         path: '/',
         httpOnly: true,
         secure: env.VITE_WEB_MODE !== 'development',
         sameSite: 'lax',
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
       });
-      deleteCookie('auth_github_oauth_state');
+      if (
+        typeof accessibleWorkspace === 'string' &&
+        accessibleWorkspace.length
+      ) {
+        setCookie(APP_COOKIES.app_currentWorkspace, accessibleWorkspace, {
+          path: '/',
+          httpOnly: true,
+          secure: env.VITE_WEB_MODE !== 'development',
+          sameSite: 'lax',
+        });
+      }
+
+      deleteCookie(APP_COOKIES.auth_githubOauthState);
 
       return new Response(null, {
         status: 302,

@@ -1,4 +1,9 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+} from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
 import { checkAuthServerFn } from '~/lib/auth/server';
 
@@ -17,7 +22,13 @@ export const Route = createFileRoute('/app')({
 function RouteComponent() {
   return (
     <main className="py-6">
-      <div className="px-6 pb-6">
+      <div className="px-6 pb-6 flex gap-2">
+        <Button asChild>
+          <Link to="/app/workspace/select">Select Workspace</Link>
+        </Button>
+        <Button asChild>
+          <Link to="/app/workspace/create">Create Workspace</Link>
+        </Button>
         <form action="/api/auth/logout" method="GET">
           <Button>Logout</Button>
         </form>

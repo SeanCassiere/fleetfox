@@ -3,12 +3,22 @@ import { seo } from '~/lib/utils';
 
 export const Route = createFileRoute('/app/$workspace/')({
   component: RouteComponent,
-  head: () => ({
-    meta: seo({ title: 'Dashboard | Fleetfox' }),
-  }),
+  head: ({
+    match: {
+      context: { workspace },
+    },
+  }) => {
+    return {
+      meta: seo({ title: `Dashboard ${workspace.workspace} | Fleetfox` }),
+    };
+  },
 });
 
 function RouteComponent() {
   const workspaceId = Route.useParams({ select: (s) => s.workspace });
-  return <div>Hello "/app/{workspaceId}/"!</div>;
+  return (
+    <div className="px-6 pt-6">
+      You are on the workspace page for {workspaceId}.
+    </div>
+  );
 }

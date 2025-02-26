@@ -1,15 +1,27 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { getAvailableWorkspacesServerFn } from '~/lib/auth/server';
+import {
+  getAvailableWorkspacesServerFn,
+  getSavedWorkspaceServerFn,
+} from '~/lib/auth/server';
 
 export const Route = createFileRoute('/app/')({
   loader: async () => {
     const workspaces = await getAvailableWorkspacesServerFn();
-
     if (workspaces.length === 0) {
-      throw redirect({ to: '/app/create-workspace' });
+      throw redirect({ to: '/app/workspace/create' });
     }
 
-    const workspace = workspaces[0].workspace;
-    throw redirect({ to: '/app/$workspace', params: { workspace } });
+    const savedWorkspace = await getSavedWorkspaceServerFn();
+    if (savedWorkspace) {
+      const found = workspaces.find((w) => w.workspace === savedWorkspace);
+      if (found) {
+        throw redirect({
+          to: '/app/$workspace',
+          params: { workspace: savedWorkspace },
+        });
+      }
+    }
+
+    throw redirect({ to: '/app/workspace/select' });
   },
 });
