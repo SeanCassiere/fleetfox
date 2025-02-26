@@ -21,7 +21,7 @@ import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { createSessionId, setSession, verifyLogin } from '~/lib/auth';
 import { checkAuthServerFn, githubLoginServerFn } from '~/lib/auth/server';
-import { getModeServerFn } from '~/lib/server/env-server-functions';
+import { getModeServerFn } from '~/server/env-server-functions';
 import { cn, seo } from '~/lib/utils';
 import { env } from '~/lib/env';
 

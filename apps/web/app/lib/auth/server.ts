@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-start/server';
 import { getSessionAndAccount, githubOAuth, githubScopes } from '~/lib/auth';
 import { env } from '~/lib/env';
+import { getWorkspacesForAccount } from '~/server/workspace';
 
 export const githubLoginServerFn = createServerFn({ method: 'POST' }).handler(
   async () => {
@@ -34,17 +35,22 @@ export const userServerMiddleware = createMiddleware().server(
     const sessionId = getCookie('auth_session_id');
 
     let returnResult: Awaited<ReturnType<typeof getSessionAndAccount>> = null;
+    let workspaces: Awaited<ReturnType<typeof getWorkspacesForAccount>> = [];
 
     if (sessionId) {
       const result = await getSessionAndAccount(sessionId);
-
       returnResult = result;
+    }
+
+    if (returnResult?.account) {
+      workspaces = await getWorkspacesForAccount(returnResult.account.id);
     }
 
     const res = await next({
       context: {
         account: returnResult?.account || null,
         session: returnResult?.session || null,
+        workspaces: workspaces,
       },
     });
     return res;
@@ -85,4 +91,10 @@ export const checkAuthServerFn = createServerFn()
       status: session ? 'proceed' : 'login',
       account,
     };
+  });
+
+export const getAvailableWorkspacesServerFn = createServerFn()
+  .middleware([userServerMiddleware])
+  .handler(({ context }) => {
+    return context.workspaces;
   });
