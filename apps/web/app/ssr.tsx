@@ -6,12 +6,16 @@ import {
 import { getRouterManifest } from '@tanstack/react-start/router-manifest';
 
 import { createRouter } from './router';
-import { serverPolyfill } from './server/polyfill';
+// import { serverPolyfill } from './server/polyfill';
 
 export default createStartHandler({
   createRouter,
   getRouterManifest,
-})(async (args) => {
-  await serverPolyfill();
-  return defaultStreamHandler(args);
-});
+})(defaultStreamHandler);
+// export default createStartHandler({
+//   createRouter,
+//   getRouterManifest,
+// })(async (args) => {
+//   await serverPolyfill();
+//   return defaultStreamHandler(args);
+// });
