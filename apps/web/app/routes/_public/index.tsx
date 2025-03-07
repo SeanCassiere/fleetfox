@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/react-start';
 import { toast } from 'sonner';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -11,11 +10,6 @@ export const Route = createFileRoute('/_public/')({
   head: () => ({
     meta: seo({ title: 'Home | Fleetfox' }),
   }),
-});
-
-const checkCrypto = createServerFn({ method: 'POST' }).handler(() => {
-  const cryptoAvailable = !!globalThis.crypto;
-  return { cryptoAvailable };
 });
 
 function Home() {
@@ -37,15 +31,6 @@ function Home() {
         </div>
         <Button type="submit">Submit</Button>
       </form>
-      <Button
-        type="button"
-        onClick={async () => {
-          const res = await checkCrypto();
-          console.log('checkCrypto', res);
-        }}
-      >
-        Check Crypto
-      </Button>
       <div>
         <Button
           type="button"
