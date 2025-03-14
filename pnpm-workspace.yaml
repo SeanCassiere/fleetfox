@@ -3,7 +3,7 @@ packages:
   - 'packages/*'
 
 catalog:
-  '@types/node': ^22.13.5
+  '@types/node': ^22.13.10
   '@eslint/js': ^9.20.0
   '@paralleldrive/cuid2': ^2.2.2
   babel-plugin-react-compiler: ^19.0.0-beta-e1e972c-20250221
