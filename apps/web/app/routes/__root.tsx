@@ -7,22 +7,12 @@ import {
 } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'sonner';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
 import appCss from '~/styles/app.css?url';
 import { seo } from '~/lib/utils';
-import { env } from '~/lib/env';
-
-const TanStackRouterDevtools =
-  env.VITE_WEB_MODE === 'production' || env.VITE_WEB_MODE === 'deploy-preview'
-    ? () => null // Render nothing in production
-    : React.lazy(() =>
-        // Lazy load in development
-        import('@tanstack/router-devtools').then((res) => ({
-          default: res.TanStackRouterDevtools,
-        })),
-      );
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
