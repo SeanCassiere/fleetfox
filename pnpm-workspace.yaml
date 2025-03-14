@@ -3,13 +3,13 @@ packages:
   - 'packages/*'
 
 catalog:
-  '@types/node': ^22.13.5
+  '@types/node': ^22.13.10
   '@eslint/js': ^9.20.0
   '@paralleldrive/cuid2': ^2.2.2
   babel-plugin-react-compiler: ^19.0.0-beta-e1e972c-20250221
   dotenv: ^16.4.7
   dotenv-cli: ^8.0.0
-  eslint: ^9.20.0
+  eslint: ^9.22.0
   eslint-config-prettier: ^10.0.1
   eslint-plugin-import-x: ^4.6.1
   eslint-plugin-react: ^7.37.4
@@ -21,6 +21,6 @@ catalog:
   prettier: ^3.5.2
   rimraf: ^6.0.1
   turbo: ^2.4.4
-  typescript: ^5.7.3
+  typescript: ^5.8.2
   typescript-eslint: ^8.24.0
   vitest: ^3.0.7
