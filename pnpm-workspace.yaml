@@ -9,7 +9,7 @@ catalog:
   babel-plugin-react-compiler: ^19.0.0-beta-e1e972c-20250221
   dotenv: ^16.4.7
   dotenv-cli: ^8.0.0
-  eslint: ^9.20.0
+  eslint: ^9.22.0
   eslint-config-prettier: ^10.0.1
   eslint-plugin-import-x: ^4.6.1
   eslint-plugin-react: ^7.37.4
