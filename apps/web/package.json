@@ -31,7 +31,7 @@
     "arctic": "^3.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.41.0",
+    "drizzle-orm": "^0.45.2",
     "lucide-react": "^0.476.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
